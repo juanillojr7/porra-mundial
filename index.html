@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Porra Lerillo WC 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body class="bg-slate-50 min-h-screen font-sans antialiased text-slate-900">
+
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        const GRUPOS = {
+            A: ["MEXICO", "SUDAFRICA", "CHEQUIA", "COREA DEL SUR"],
+            B: ["CANADA", "QATAR", "SUIZA", "BOSNIA"],
+            C: ["BRASIL", "HAITI", "ESCOCIA", "MARRUECOS"],
+            D: ["EEUU", "PARAGUAY", "AUSTRALIA", "TURQUIA"],
+            E: ["ALEMANIA", "CURAZAO", "ECUADOR", "COSTA DE MARFIL"],
+            F: ["PAISES BAJOS", "JAPON", "SUECIA", "TUNEZ"],
+            G: ["BELGICA", "EGIPTO", "IRAN", "NUEVA ZELANDA"],
+            H: ["ESPAÑA", "CABO VERDE", "ARABIA SAUDI", "URUGUAY"],
+            I: ["FRANCIA", "IRAK", "NORUEGA", "SENEGAL"],
+            J: ["ARGELIA", "ARGENTINA", "JORDANIA", "AUSTRIA"],
+            K: ["PORTUGAL", "CONGO", "UZBEKISTAN", "COLOMBIA"],
+            L: ["INGLATERRA", "CROACIA", "GHANA", "PANAMA"]
+        };
+
+        const TODOS_LOS_EQUIPOS = Object.values(GRUPOS).flat().sort();
+
+        const generarPartidosPorGrupo = (letra, equipos) => [
+            { id: `${letra}1`, local: equipos[0], visitante: equipos[1] },
+            { id: `${letra}2`, local: equipos[2], visitante: equipos[3] },
+            { id: `${letra}3`, local: equipos[0], visitante: equipos[2] },
+            { id: `${letra}4`, local: equipos[1], visitante: equipos[3] },
+            { id: `${letra}5`, local: equipos[0], visitante: equipos[3] },
+            { id: `${letra}6`, local: equipos[1], visitante: equipos[2] }
+        ];
+
+        const TODOS_LOS_PARTIDOS = Object.keys(GRUPOS).reduce((acc, letra) => {
+            return [...acc, ...generarPartidosPorGrupo(letra, GRUPOS[letra])];
+        }, []);
+
+        const PUNTOS = {
+            GRUPO_EXACTO: 25,
+            GRUPO_GANADOR_GOL: 15,
+            GRUPO_EMPATE_GOL: 12.5,
+            GRUPO_GANADOR: 10,
+            GRUPO_SOLO_GOL: 5,
+            DIECISEISAVOS: 10,
+            OCTAVOS: 20,
+            CUARTOS: 30,
+            SEMIFINALES: 40,
+            FINAL: 50,
+            POS_1: 80, POS_2: 60, POS_3: 40, POS_4: 20,
+            GOLEADOR: 5
+        };
+
+        function calcularPuntosPartido(pronostico, real) {
+            if (!pronostico || !real || pronostico.golesL === '' || pronostico.golesV === '' || real.golesL === undefined || real.golesL === '') return 0;
+            const pl = parseInt(pronostico.golesL); const pv = parseInt(pronostico.golesV);
+            const rl = parseInt(real.golesL); const rv = parseInt(real.golesV);
+
+            if (pl === rl && pv === rv) return PUNTOS.GRUPO_EXACTO;
+            
+            const signoP = pl > pv ? '1' : pl < pv ? '2' : 'X';
+            const signoR = rl > rv ? '1' : rl < rv ? '2' : 'X';
+            const aciertaSigno = signoP === signoR;
+
+            if (signoR === 'X' && aciertaSigno) return PUNTOS.GRUPO_EMPATE_GOL;
+            if (aciertaSigno && (pl === rl || pv === rv)) return PUNTOS.GRUPO_GANADOR_GOL;
+            if (aciertaSigno) return PUNTOS.GRUPO_GANADOR;
+            if (pl === rl || pv === rv) return PUNTOS.GRUPO_SOLO_GOL;
+            return 0;
+        }
+
+        function calcularPorraTotal(apuesta, reales) {
+            if (!reales) return 0;
+            let total = 0;
+            
+            TODOS_LOS_PARTIDOS.forEach(partido => {
+                total += calcularPuntosPartido(apuesta.partidos?.[partido.id], reales.partidos?.[partido.id]);
+            });
+
+            const fases = ['dieciseisavos', 'octavos', 'cuartos', 'semifinales', 'final'];
+            fases.forEach(fase => {
+                const jugados = apuesta.clasificados?.[fase] || [];
+                const realesFase = reales.clasificados?.[fase] || [];
+                const ptosFase = PUNTOS[fase.toUpperCase()];
+                
+                jugados.forEach(eq => {
+                    if (eq && realesFase.some(r => r.trim().toUpperCase() === eq.trim().toUpperCase())) {
+                        total += ptosFase;
+                    }
+                });
+            });
+            
+            for (let i = 1; i <= 4; i++) {
+                if (apuesta.posiciones?.[i] && apuesta.posiciones[i].trim().toUpperCase() === reales.posiciones?.[i]?.trim().toUpperCase()) {
+                    total += PUNTOS[`POS_${i}`];
+                }
+            }
+            
+            (apuesta.goleadores || []).forEach(g => {
+                if (g) {
+                    const jugadorLimpio = g.trim().toUpperCase();
+                    const golesReal = reales.golesJugadores?.[jugadorLimpio] || 0;
+                    total += golesReal * PUNTOS.GOLEADOR;
+                }
+            });
+            return total;
+        }
+
+        function PorraApp() {
+            const [pestaña, setPestaña] = useState('pronosticos');
+            const [participantes, setParticipantes] = useState([]);
+            const [resultadosReales, setResultadosReales] = useState(null);
+
+            useEffect(() => {
+                const t = `?t=${new Date().getTime()}`;
+                
+                fetch(`./resultados.json${t}`)
+                    .then(res => res.json())
+                    .then(data => setResultadosReales(data))
+                    .catch(() => console.log("resultados.json no encontrado"));
+
+                fetch(`./participantes.json${t}`)
+                    .then(res => res.json())
+                    .then(data => setParticipantes(data))
+                    .catch(() => console.log("participantes.json no encontrado"));
+            }, []);
+
+            return (
+                <div class="max-w-6xl mx-auto p-4 md:p-6">
+                    <header class="text-center mb-8">
+                        <h1 class="text-4xl font-black text-slate-800 tracking-tight">Porra Lerillo WC 2026</h1>
+                        <p class="text-slate-500 mt-2 font-medium">Cuota: 20€ • Cierre: Martes 9 de Junio</p>
+                    </header>
+
+                    <nav class="flex flex-wrap justify-center gap-2 mb-8 bg-white p-2 rounded-2xl shadow-sm border border-slate-200">
+                        <button onClick={() => setPestaña('pronosticos')} class={`flex-1 py-2.5 px-4 rounded-xl font-bold text-sm transition ${pestaña === 'pronosticos' ? 'bg-indigo-600 text-white' : 'text-slate-600 hover:bg-slate-50'}`}>
+                            1. Mis Pronósticos
+                        </button>
+                        <button onClick={() => setPestaña('consulta')} class={`flex-1 py-2.5 px-4 rounded-xl font-bold text-sm transition ${pestaña === 'consulta' ? 'bg-indigo-600 text-white' : 'text-slate-600 hover:bg-slate-50'}`}>
+                            2. Consultar Grupo
+                        </button>
+                        <button onClick={() => setPestaña('ranking')} class={`flex-1 py-2.5 px-4 rounded-xl font-bold text-sm transition ${pestaña === 'ranking' ? 'bg-indigo-600 text-white' : 'text-slate-600 hover:bg-slate-50'}`}>
+                            3. Ranking Global
+                        </button>
+                    </nav>
+
+                    <main>
+                        {pestaña === 'pronosticos' && <FormularioInscripcion />}
+                        {pestaña === 'consulta' && <SeccionConsulta participantes={participantes} reales={resultadosReales} />}
+                        {pestaña === 'ranking' && <SeccionRanking participantes={participantes} reales={resultadosReales} />}
+                    </main>
+                </div>
+            );
+        }
+
+        function FormularioInscripcion() {
+            const [usuario, setUsuario] = useState({ nombre: '', telefono: '' });
+            const [partidos, setPartidos] = useState(TODOS_LOS_PARTIDOS.reduce((acc, p) => ({ ...acc, [p.id]: { golesL: '', golesV: '' } }), {}));
+            const [goleadores, setGoleadores] = useState(['', '', '', '', '']);
+            const [posiciones, setPosiciones] = useState({ 1: '', 2: '', 3: '', 4: '' });
+            
+            const [clasificados, setClasificados] = useState({
+                dieciseisavos: Array(32).fill(''),
+                octavos: Array(16).fill(''),
+                cuartos: Array(8).fill(''),
+                semifinales: Array(4).fill(''),
+                final: Array(2).fill('')
+            });
+
+            const prevencionTeclasInvalidas = (e) => {
+                if (['e', 'E', '+', '-', '.', ','].includes(e.key)) {
+                    e.preventDefault();
+                }
+            };
+
+            const handleCambioGol = (id, campo, valor) => {
+                setPartidos(prev => ({ ...prev, [id]: { ...prev[id], [campo]: valor } }));
+            };
+
+            const handleClasificado = (fase, index, valor) => {
+                const nuevos = [...clasificados[fase]];
+                nuevos[index] = valor;
+                setClasificados({...clasificados, [fase]: nuevos});
+            };
+
+            // Comprueba que todos los campos requeridos esten rellenos y sin duplicados en las rondas
+            const validarFormulario = () => {
+                if (!usuario.nombre.trim() || !usuario.telefono.trim()) return "Faltan datos personales.";
+
+                const faltanPartidos = Object.values(partidos).some(p => p.golesL === '' || p.golesV === '');
+                if (faltanPartidos) return "Faltan resultados en la fase de grupos.";
+
+                const fases = ['dieciseisavos', 'octavos', 'cuartos', 'semifinales', 'final'];
+                for (const fase of fases) {
+                    if (clasificados[fase].some(eq => eq === '')) return `Faltan equipos en ${fase}.`;
+                    
+                    const sinVacios = clasificados[fase].filter(eq => eq !== '');
+                    if (new Set(sinVacios).size !== sinVacios.length) {
+                        return `Hay equipos repetidos en la fase de ${fase}.`;
+                    }
+                }
+
+                if ([1, 2, 3, 4].some(num => posiciones[num] === '')) return "Faltan posiciones en el podio.";
+                const equiposPodio = [1, 2, 3, 4].map(num => posiciones[num]).filter(eq => eq !== '');
+                if (new Set(equiposPodio).size !== equiposPodio.length) return "Hay equipos repetidos en el podio.";
+
+                if (goleadores.some(g => g.trim() === '')) return "Faltan goleadores por elegir.";
+
+                return null;
+            };
+
+            const errorValidacion = validarFormulario();
+
+            const procesarYDescargar = () => {
+                if (errorValidacion) return;
+
+                const payload = { 
+                    nombre: usuario.nombre, 
+                    telefono: usuario.telefono, 
+                    apuesta: { partidos, goleadores, posiciones, clasificados } 
+                };
+                const nombreLimpio = usuario.nombre.trim().replace(/\s+/g, '_');
+
+                const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload));
+                const dlAnchor = document.createElement('a');
+                dlAnchor.setAttribute("href", dataStr);
+                dlAnchor.setAttribute("download", `porra_${nombreLimpio}.json`);
+                document.body.appendChild(dlAnchor);
+                dlAnchor.click();
+                dlAnchor.remove();
+
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                
+                doc.setFont("Helvetica", "bold"); doc.text("RESGUARDO OFICIAL", 14, 20);
+                doc.setFont("Helvetica", "normal"); doc.text(`Participante: ${usuario.nombre}`, 14, 30);
+                doc.text(`Teléfono: ${usuario.telefono}`, 14, 36);
+                
+                doc.setFont("Helvetica", "bold"); doc.text("Goleadores:", 14, 50);
+                doc.setFont("Helvetica", "normal");
+                goleadores.forEach((g, i) => doc.text(`- Goleador ${i+1}: ${g || 'No indicado'}`, 14, 58 + (i * 6)));
+
+                doc.setFont("Helvetica", "bold"); doc.text("Clasificación Final (4 primeros):", 14, 95);
+                doc.setFont("Helvetica", "normal");
+                doc.text(`1º: ${posiciones[1] || '---'}`, 14, 103);
+                doc.text(`2º: ${posiciones[2] || '---'}`, 14, 110);
+                doc.text(`3º: ${posiciones[3] || '---'}`, 14, 117);
+                doc.text(`4º: ${posiciones[4] || '---'}`, 14, 124);
+
+                doc.save(`Resguardo_Porra_${nombreLimpio}.pdf`);
+            };
+
+            return (
+                <div class="space-y-6 max-w-4xl mx-auto">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                        <h2 class="text-lg font-bold text-slate-800 mb-4">1. Datos Personales</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <input type="text" placeholder="Tu Apellido o Mote" class="border rounded-xl p-3 text-sm outline-none bg-slate-50 focus:bg-white" value={usuario.nombre} onChange={e => setUsuario({...usuario, nombre: e.target.value})} />
+                            <input type="text" placeholder="Número de Teléfono" class="border rounded-xl p-3 text-sm outline-none bg-slate-50 focus:bg-white" value={usuario.telefono} onChange={e => setUsuario({...usuario, telefono: e.target.value})} />
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                        <h2 class="text-lg font-bold text-slate-800 mb-4">2. Fase de Grupos</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {Object.keys(GRUPOS).map(letra => (
+                                <div key={letra} class="bg-slate-50/50 p-4 rounded-xl border border-slate-100">
+                                    <h4 class="font-black text-indigo-600 text-xs uppercase mb-2">Grupo {letra}</h4>
+                                    <div class="space-y-2">
+                                        {generarPartidosPorGrupo(letra, GRUPOS[letra]).map(partido => (
+                                            <div key={partido.id} class="flex items-center justify-between text-xs bg-white p-2 rounded-lg border shadow-sm">
+                                                <span class="w-2/5 text-right font-medium truncate">{partido.local}</span>
+                                                <div class="flex items-center space-x-1 mx-1">
+                                                    <input type="number" min="0" onKeyDown={prevencionTeclasInvalidas} class="w-8 text-center border rounded font-bold p-1 bg-slate-50" value={partidos[partido.id].golesL} onChange={e => handleCambioGol(partido.id, 'golesL', e.target.value)} />
+                                                    <input type="number" min="0" onKeyDown={prevencionTeclasInvalidas} class="w-8 text-center border rounded font-bold p-1 bg-slate-50" value={partidos[partido.id].golesV} onChange={e => handleCambioGol(partido.id, 'golesV', e.target.value)} />
+                                                </div>
+                                                <span class="w-2/5 text-left font-medium truncate">{partido.visitante}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                        <h2 class="text-lg font-bold text-slate-800 mb-4">3. Eliminatorias</h2>
+                        
+                        <div class="mb-6">
+                            <h3 class="font-bold text-sm text-slate-700 mb-2">Dieciseisavos (32 Equipos)</h3>
+                            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-2">
+                                {clasificados.dieciseisavos.map((v, i) => (
+                                    <select key={i} class="border rounded-md p-1.5 text-xs bg-slate-50 w-full outline-none" value={v} onChange={e => handleClasificado('dieciseisavos', i, e.target.value)}>
+                                        <option value="">-- Equipo --</option>
+                                        {TODOS_LOS_EQUIPOS.map(eq => <option key={eq} value={eq}>{eq}</option>)}
+                                    </select>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div class="mb-6">
+                            <h3 class="font-bold text-sm text-slate-700 mb-2">Octavos (16 Equipos)</h3>
+                            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-2">
+                                {clasificados.octavos.map((v, i) => (
+                                    <select key={i} class="border rounded-md p-1.5 text-xs bg-slate-50 w-full outline-none" value={v} onChange={e => handleClasificado('octavos', i, e.target.value)}>
+                                        <option value="">-- Equipo --</option>
+                                        {TODOS_LOS_EQUIPOS.map(eq => <option key={eq} value={eq}>{eq}</option>)}
+                                    </select>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div class="mb-6">
+                            <h3 class="font-bold text-sm text-slate-700 mb-2">Cuartos (8 Equipos)</h3>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                                {clasificados.cuartos.map((v, i) => (
+                                    <select key={i} class="border rounded-md p-1.5 text-xs bg-slate-50 w-full outline-none" value={v} onChange={e => handleClasificado('cuartos', i, e.target.value)}>
+                                        <option value="">-- Equipo --</option>
+                                        {TODOS_LOS_EQUIPOS.map(eq => <option key={eq} value={eq}>{eq}</option>)}
+                                    </select>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <h3 class="font-bold text-sm text-slate-700 mb-2">Semifinales (4 Equipos)</h3>
+                                <div class="grid grid-cols-2 gap-2">
+                                    {clasificados.semifinales.map((v, i) => (
+                                        <select key={i} class="border rounded-md p-1.5 text-xs bg-slate-50 w-full outline-none" value={v} onChange={e => handleClasificado('semifinales', i, e.target.value)}>
+                                            <option value="">-- Equipo --</option>
+                                            {TODOS_LOS_EQUIPOS.map(eq => <option key={eq} value={eq}>{eq}</option>)}
+                                        </select>
+                                    ))}
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-sm text-slate-700 mb-2">Final (2 Equipos)</h3>
+                                <div class="grid grid-cols-2 gap-2">
+                                    {clasificados.final.map((v, i) => (
+                                        <select key={i} class="border rounded-md p-1.5 text-xs bg-slate-50 border-indigo-200 w-full outline-none" value={v} onChange={e => handleClasificado('final', i, e.target.value)}>
+                                            <option value="">-- Finalista --</option>
+                                            {TODOS_LOS_EQUIPOS.map(eq => <option key={eq} value={eq}>{eq}</option>)}
+                                        </select>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                        <h2 class="text-lg font-bold text-slate-800 mb-4">4. Podio y Goleadores</h2>
+                        
+                        <div class="mb-6">
+                            <h3 class="font-bold text-sm text-slate-700 mb-2">Posición Exacta (4 Primeros)</h3>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                                {[1, 2, 3, 4].map(num => (
+                                    <select key={num} class="border rounded-lg p-2 text-xs font-bold bg-slate-50 border-indigo-100 w-full outline-none" value={posiciones[num]} onChange={e => setPosiciones({...posiciones, [num]: e.target.value})}>
+                                        <option value="">-- {num}º Puesto --</option>
+                                        {TODOS_LOS_EQUIPOS.map(eq => <option key={eq} value={eq}>{eq}</option>)}
+                                    </select>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="font-bold text-sm text-slate-700 mb-2">Selección de 5 Goleadores</h3>
+                            <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
+                                {goleadores.map((g, i) => (
+                                    <input key={i} type="text" placeholder={`Goleador ${i+1}`} class="border rounded-lg p-2 text-xs bg-slate-50" value={g} onChange={e => { const n = [...goleadores]; n[i] = e.target.value; setGoleadores(n); }} />
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center pb-8 flex flex-col items-center">
+                        {errorValidacion && (
+                            <p class="text-red-500 font-bold mb-3">{errorValidacion}</p>
+                        )}
+                        <button 
+                            onClick={procesarYDescargar} 
+                            disabled={!!errorValidacion}
+                            class={`font-bold px-8 py-3.5 rounded-xl shadow-md transition ${errorValidacion ? 'bg-slate-300 text-slate-500 cursor-not-allowed' : 'bg-indigo-600 text-white hover:bg-indigo-700'}`}>
+                            Descargar Apuesta
+                        </button>
+                    </div>
+                </div>
+            );
+        }
+
+        function SeccionConsulta({ participantes, reales }) {
+            const [seleccionado, setSeleccionado] = useState('');
+            if (!participantes || participantes.length === 0) return <div class="text-center p-8 bg-white rounded-2xl text-slate-400">Archivos no cargados o vacíos en el sistema.</div>;
+
+            const actual = participantes.find(p => p.nombre === seleccionado) || participantes[0];
+            const totalPts = calcularPorraTotal(actual.apuesta, reales);
+
+            return (
+                <div class="space-y-6">
+                    <div class="bg-white p-4 rounded-xl border flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
+                        <select class="border p-2 rounded-xl bg-white text-sm font-bold text-slate-700 outline-none w-full sm:w-64" value={seleccionado || actual.nombre} onChange={e => setSeleccionado(e.target.value)}>
+                            {participantes.map(p => <option key={p.nombre} value={p.nombre}>{p.nombre}</option>)}
+                        </select>
+                        <div class="bg-indigo-50 border text-center px-4 py-2 rounded-xl">
+                            <span class="text-xs font-bold text-indigo-500 block uppercase">Puntuación</span>
+                            <span class="text-2xl font-black text-indigo-600">{totalPts}</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-2xl border shadow-sm">
+                        <h3 class="font-bold text-slate-800 mb-3 text-base">Fase de Grupos</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-2">
+                            {TODOS_LOS_PARTIDOS.map(partido => {
+                                const pr = actual.apuesta.partidos?.[partido.id];
+                                return (
+                                    <div key={partido.id} class="p-2 rounded border bg-slate-50 text-xs">
+                                        <p class="font-bold text-slate-700 truncate">{partido.local} vs {partido.visitante}</p>
+                                        <p class="text-slate-500">Pronóstico: {pr?.golesL}-{pr?.golesV}</p>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-white p-5 rounded-2xl border shadow-sm space-y-4">
+                            <h3 class="font-bold text-slate-800 text-base">Eliminatorias</h3>
+                            {['dieciseisavos', 'octavos', 'cuartos', 'semifinales', 'final'].map(fase => (
+                                <div key={fase}>
+                                    <h4 class="font-bold text-xs text-slate-500 uppercase">{fase}</h4>
+                                    <div class="flex flex-wrap gap-1 mt-1">
+                                        {(actual.apuesta.clasificados?.[fase] || []).map((eq, i) => (
+                                            eq ? <span key={i} class="bg-slate-100 text-slate-700 px-2 py-1 rounded text-xs border">{eq}</span> : null
+                                        ))}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                        
+                        <div class="space-y-6">
+                            <div class="bg-white p-5 rounded-2xl border shadow-sm">
+                                <h3 class="font-bold text-slate-800 mb-3 text-base">Goleadores</h3>
+                                <div class="space-y-2 text-sm">
+                                    {(actual.apuesta.goleadores || []).map((g, i) => (
+                                        <div key={i} class="p-2 bg-slate-50 rounded flex justify-between border">
+                                            <span class="font-medium">{g || '-'}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white p-5 rounded-2xl border shadow-sm">
+                                <h3 class="font-bold text-slate-800 mb-3 text-base">Podio Exacto</h3>
+                                <div class="space-y-2 text-sm">
+                                    {[1, 2, 3, 4].map(num => (
+                                        <div key={num} class="p-2 bg-slate-50 rounded flex justify-between border">
+                                            <span class="text-slate-500 font-bold">{num}º Puesto</span>
+                                            <span class="font-bold">{actual.apuesta.posiciones?.[num] || '-'}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        function SeccionRanking({ participantes, reales }) {
+            if (!participantes || participantes.length === 0) return <div class="text-center p-8 bg-white rounded-2xl text-slate-400">Sin participantes registrados.</div>;
+            const tablaOrdenada = participantes.map(p => ({ nombre: p.nombre, puntos: calcularPorraTotal(p.apuesta, reales) })).sort((a, b) => b.puntos - a.puntos);
+
+            return (
+                <div class="bg-white p-6 rounded-2xl border shadow-sm max-w-xl mx-auto">
+                    <h3 class="text-xl font-bold text-center text-slate-800 mb-4">Clasificación General</h3>
+                    <div class="border rounded-xl overflow-hidden divide-y">
+                        {tablaOrdenada.map((user, i) => (
+                            <div key={i} class="flex justify-between items-center p-3.5 hover:bg-slate-50 text-sm">
+                                <div class="flex items-center space-x-3">
+                                    <span class="font-bold text-slate-400 w-6">{i+1}º</span>
+                                    <span class="font-semibold text-slate-700">{user.nombre}</span>
+                                </div>
+                                <span class="font-black text-indigo-600 text-base">{user.puntos}</span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<PorraApp />);
+    </script>
+</body>
+</html>
