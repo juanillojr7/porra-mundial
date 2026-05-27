@@ -8,7 +8,6 @@
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body class="bg-slate-50 min-h-screen font-sans antialiased text-slate-900">
 
@@ -51,7 +50,6 @@
 
         const TODOS_LOS_EQUIPOS = Object.values(GRUPOS).flat().sort();
 
-        // Generador cronologico de enfrentamientos
         const generarPartidosPorGrupo = (letra, equipos) => [
             { id: `${letra}1`, local: equipos[0], visitante: equipos[1] },
             { id: `${letra}2`, local: equipos[2], visitante: equipos[3] },
@@ -98,7 +96,6 @@
             return 0;
         }
 
-        // Busqueda insensible a mayusculas/minusculas
         function obtenerGolesJugador(nombreJugador, reales) {
             if (!nombreJugador || !reales || !reales.golesJugadores) return 0;
             const nombreLimpio = nombreJugador.trim().toUpperCase();
@@ -151,12 +148,12 @@
                 fetch(`./resultados.json${t}`)
                     .then(res => res.json())
                     .then(data => setResultadosReales(data))
-                    .catch(() => console.log("resultados.json no encontrado"));
+                    .catch(() => console.log("Error al cargar resultados.json"));
 
                 fetch(`./participantes.json${t}`)
                     .then(res => res.json())
                     .then(data => setParticipantes(data))
-                    .catch(() => console.log("participantes.json no encontrado"));
+                    .catch(() => console.log("Error al cargar participantes.json"));
             }, []);
 
             return (
@@ -244,7 +241,6 @@
 
             const errorValidacion = validarFormulario();
 
-            // Ejecucion de descarga secuencial
             const procesarYDescargar = () => {
                 if (errorValidacion) return;
 
@@ -266,25 +262,8 @@
                 dlAnchor.remove();
 
                 setTimeout(() => {
-                    const { jsPDF } = window.jspdf;
-                    const doc = new jsPDF();
-                    
-                    doc.setFont("Helvetica", "bold"); doc.text("RESGUARDO OFICIAL", 14, 20);
-                    doc.setFont("Helvetica", "normal"); doc.text(`Participante: ${usuario.nombre}`, 14, 30);
-                    
-                    doc.setFont("Helvetica", "bold"); doc.text("Goleadores:", 14, 44);
-                    doc.setFont("Helvetica", "normal");
-                    goleadores.forEach((g, i) => doc.text(`- Goleador ${i+1}: ${g || 'No indicado'}`, 14, 52 + (i * 6)));
-
-                    doc.setFont("Helvetica", "bold"); doc.text("Clasificacion Final (4 primeros):", 14, 89);
-                    doc.setFont("Helvetica", "normal");
-                    doc.text(`1o: ${posiciones[1] || '---'}`, 14, 97);
-                    doc.text(`2o: ${posiciones[2] || '---'}`, 14, 104);
-                    doc.text(`3o: ${posiciones[3] || '---'}`, 14, 111);
-                    doc.text(`4o: ${posiciones[4] || '---'}`, 14, 118);
-
-                    doc.save(`Resguardo_Porra_${nombreLimpio}.pdf`);
-                }, 800);
+                    alert("¡Apuesta descargada correctamente!\n\nPor favor, ve a tus descargas y envía el archivo JSON al administrador por WhatsApp.");
+                }, 500);
             };
 
             return (
@@ -510,7 +489,7 @@
                                                 return (
                                                     <div key={partido.id} class={`p-2 rounded border text-xs ${colorBg}`}>
                                                         <p class="font-bold text-slate-800 truncate">{bandera(partido.local)} vs {bandera(partido.visitante)}</p>
-                                                        <p class="text-slate-500 font-medium mb-1">Fecha: {fechaPartido}</p>
+                                                        <p class="text-slate-500 font-medium mb-1">📅 {fechaPartido}</p>
                                                         <p class="text-slate-600 mt-1">Apuesta: {pr?.golesL}-{pr?.golesV}</p>
                                                         {jugado && <p class="text-slate-700 font-semibold mt-1">Real: {re.golesL}-{re.golesV} <span class="font-bold">(+{pts}p)</span></p>}
                                                     </div>
