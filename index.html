@@ -194,7 +194,6 @@
                 setClasificados({...clasificados, [fase]: nuevos});
             };
 
-            // Comprueba que todos los campos requeridos esten rellenos y sin duplicados en las rondas
             const validarFormulario = () => {
                 if (!usuario.nombre.trim() || !usuario.telefono.trim()) return "Faltan datos personales.";
 
@@ -423,10 +422,23 @@
                         <div class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-2">
                             {TODOS_LOS_PARTIDOS.map(partido => {
                                 const pr = actual.apuesta.partidos?.[partido.id];
+                                const re = reales?.partidos?.[partido.id];
+                                const pts = calcularPuntosPartido(pr, re);
+                                const jugado = re && re.golesL !== undefined && re.golesL !== '';
+
+                                // Evaluacion de color basada en puntos obtenidos
+                                let colorBg = 'bg-slate-50 border-slate-200';
+                                if (jugado) {
+                                    if (pts === 25) colorBg = 'bg-green-100 border-green-400';
+                                    else if (pts > 0) colorBg = 'bg-orange-100 border-orange-400';
+                                    else colorBg = 'bg-red-100 border-red-400';
+                                }
+
                                 return (
-                                    <div key={partido.id} class="p-2 rounded border bg-slate-50 text-xs">
-                                        <p class="font-bold text-slate-700 truncate">{partido.local} vs {partido.visitante}</p>
-                                        <p class="text-slate-500">Pronóstico: {pr?.golesL}-{pr?.golesV}</p>
+                                    <div key={partido.id} class={`p-2 rounded border text-xs ${colorBg}`}>
+                                        <p class="font-bold text-slate-800 truncate">{partido.local} vs {partido.visitante}</p>
+                                        <p class="text-slate-600 mt-1">Apuesta: {pr?.golesL}-{pr?.golesV}</p>
+                                        {jugado && <p class="text-slate-700 font-semibold mt-1">Real: {re.golesL}-{re.golesV} (+{pts}p)</p>}
                                     </div>
                                 );
                             })}
@@ -436,39 +448,74 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="bg-white p-5 rounded-2xl border shadow-sm space-y-4">
                             <h3 class="font-bold text-slate-800 text-base">Eliminatorias</h3>
-                            {['dieciseisavos', 'octavos', 'cuartos', 'semifinales', 'final'].map(fase => (
-                                <div key={fase}>
-                                    <h4 class="font-bold text-xs text-slate-500 uppercase">{fase}</h4>
-                                    <div class="flex flex-wrap gap-1 mt-1">
-                                        {(actual.apuesta.clasificados?.[fase] || []).map((eq, i) => (
-                                            eq ? <span key={i} class="bg-slate-100 text-slate-700 px-2 py-1 rounded text-xs border">{eq}</span> : null
-                                        ))}
+                            {['dieciseisavos', 'octavos', 'cuartos', 'semifinales', 'final'].map(fase => {
+                                const realesFase = reales?.clasificados?.[fase] || [];
+                                const faseEmpezada = realesFase.length > 0;
+
+                                return (
+                                    <div key={fase}>
+                                        <h4 class="font-bold text-xs text-slate-500 uppercase">{fase}</h4>
+                                        <div class="flex flex-wrap gap-1 mt-1">
+                                            {(actual.apuesta.clasificados?.[fase] || []).map((eq, i) => {
+                                                if (!eq) return null;
+                                                
+                                                // Color por acierto en clasificacion de equipos
+                                                let colorTag = 'bg-slate-100 text-slate-700 border-slate-200';
+                                                if (faseEmpezada) {
+                                                    const acertado = realesFase.some(r => r.trim().toUpperCase() === eq.trim().toUpperCase());
+                                                    colorTag = acertado ? 'bg-green-100 text-green-800 border-green-300' : 'bg-red-100 text-red-800 border-red-300';
+                                                }
+                                                return <span key={i} class={`px-2 py-1 rounded text-xs border ${colorTag}`}>{eq}</span>;
+                                            })}
+                                        </div>
                                     </div>
-                                </div>
-                            ))}
+                                )
+                            })}
                         </div>
                         
                         <div class="space-y-6">
                             <div class="bg-white p-5 rounded-2xl border shadow-sm">
                                 <h3 class="font-bold text-slate-800 mb-3 text-base">Goleadores</h3>
                                 <div class="space-y-2 text-sm">
-                                    {(actual.apuesta.goleadores || []).map((g, i) => (
-                                        <div key={i} class="p-2 bg-slate-50 rounded flex justify-between border">
-                                            <span class="font-medium">{g || '-'}</span>
-                                        </div>
-                                    ))}
+                                    {(actual.apuesta.goleadores || []).map((g, i) => {
+                                        const jugadorLimpio = g ? g.trim().toUpperCase() : '';
+                                        const golesReal = reales?.golesJugadores?.[jugadorLimpio] || 0;
+                                        
+                                        // Color por acumulacion de goles (no hay finalizado en goleadores)
+                                        const colorBg = golesReal > 0 ? 'bg-green-100 border-green-300' : 'bg-slate-50 border-slate-200';
+
+                                        return (
+                                            <div key={i} class={`p-2 rounded flex justify-between border ${colorBg}`}>
+                                                <span class="font-medium text-slate-700">{g || '-'}</span>
+                                                {golesReal > 0 && <span class="font-bold text-green-700">+{golesReal * PUNTOS.GOLEADOR}p</span>}
+                                            </div>
+                                        );
+                                    })}
                                 </div>
                             </div>
                             
                             <div class="bg-white p-5 rounded-2xl border shadow-sm">
                                 <h3 class="font-bold text-slate-800 mb-3 text-base">Podio Exacto</h3>
                                 <div class="space-y-2 text-sm">
-                                    {[1, 2, 3, 4].map(num => (
-                                        <div key={num} class="p-2 bg-slate-50 rounded flex justify-between border">
-                                            <span class="text-slate-500 font-bold">{num}º Puesto</span>
-                                            <span class="font-bold">{actual.apuesta.posiciones?.[num] || '-'}</span>
-                                        </div>
-                                    ))}
+                                    {[1, 2, 3, 4].map(num => {
+                                        const eq = actual.apuesta.posiciones?.[num];
+                                        const realEq = reales?.posiciones?.[num];
+                                        const podioRelleno = realEq && realEq.trim() !== '';
+                                        
+                                        // Color por acierto de posicion final exacta
+                                        let colorBg = 'bg-slate-50 border-slate-200';
+                                        if (podioRelleno) {
+                                            const acertado = realEq.trim().toUpperCase() === (eq ? eq.trim().toUpperCase() : '');
+                                            colorBg = acertado ? 'bg-green-100 border-green-300' : 'bg-red-100 border-red-300';
+                                        }
+
+                                        return (
+                                            <div key={num} class={`p-2 rounded flex justify-between border ${colorBg}`}>
+                                                <span class="text-slate-600 font-bold">{num}º Puesto</span>
+                                                <span class="font-bold text-slate-800">{eq || '-'}</span>
+                                            </div>
+                                        );
+                                    })}
                                 </div>
                             </div>
                         </div>
