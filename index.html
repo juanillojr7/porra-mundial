@@ -8,7 +8,6 @@
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body class="bg-[url('https://images.unsplash.com/photo-1508344928928-7105b87de382?q=80&w=2070')] bg-cover bg-center bg-fixed min-h-screen font-sans antialiased text-white">
 
@@ -65,31 +64,19 @@
         }, []);
 
         const PUNTOS = {
-            GRUPO_EXACTO: 25,
-            GRUPO_GANADOR_GOL: 15,
-            GRUPO_EMPATE_GOL: 12.5,
-            GRUPO_GANADOR: 10,
-            GRUPO_SOLO_GOL: 5,
-            DIECISEISAVOS: 10,
-            OCTAVOS: 20,
-            CUARTOS: 30,
-            SEMIFINALES: 40,
-            FINAL: 50,
-            POS_1: 80, POS_2: 60, POS_3: 40, POS_4: 20,
-            GOLEADOR: 5
+            GRUPO_EXACTO: 25, GRUPO_GANADOR_GOL: 15, GRUPO_EMPATE_GOL: 12.5, GRUPO_GANADOR: 10, GRUPO_SOLO_GOL: 5,
+            DIECISEISAVOS: 10, OCTAVOS: 20, CUARTOS: 30, SEMIFINALES: 40, FINAL: 50,
+            POS_1: 80, POS_2: 60, POS_3: 40, POS_4: 20, GOLEADOR: 5
         };
 
         function calcularPuntosPartido(pronostico, real) {
             if (!pronostico || !real || pronostico.golesL === '' || pronostico.golesV === '' || real.golesL === undefined || real.golesL === '') return 0;
             const pl = parseInt(pronostico.golesL); const pv = parseInt(pronostico.golesV);
             const rl = parseInt(real.golesL); const rv = parseInt(real.golesV);
-
             if (pl === rl && pv === rv) return PUNTOS.GRUPO_EXACTO;
-            
             const signoP = pl > pv ? '1' : pl < pv ? '2' : 'X';
             const signoR = rl > rv ? '1' : rl < rv ? '2' : 'X';
             const aciertaSigno = signoP === signoR;
-
             if (signoR === 'X' && aciertaSigno) return PUNTOS.GRUPO_EMPATE_GOL;
             if (aciertaSigno && (pl === rl || pv === rv)) return PUNTOS.GRUPO_GANADOR_GOL;
             if (aciertaSigno) return PUNTOS.GRUPO_GANADOR;
@@ -107,34 +94,16 @@
         function calcularPorraTotal(apuesta, reales) {
             if (!reales) return 0;
             let total = 0;
-            
-            TODOS_LOS_PARTIDOS.forEach(partido => {
-                total += calcularPuntosPartido(apuesta.partidos?.[partido.id], reales.partidos?.[partido.id]);
-            });
-
+            TODOS_LOS_PARTIDOS.forEach(partido => { total += calcularPuntosPartido(apuesta.partidos?.[partido.id], reales.partidos?.[partido.id]); });
             const fases = ['dieciseisavos', 'octavos', 'cuartos', 'semifinales', 'final'];
             fases.forEach(fase => {
                 const jugados = apuesta.clasificados?.[fase] || [];
                 const realesFase = reales.clasificados?.[fase] || [];
                 const ptosFase = PUNTOS[fase.toUpperCase()];
-                
-                jugados.forEach(eq => {
-                    if (eq && realesFase.some(r => r.trim().toUpperCase() === eq.trim().toUpperCase())) {
-                        total += ptosFase;
-                    }
-                });
+                jugados.forEach(eq => { if (eq && realesFase.some(r => r.trim().toUpperCase() === eq.trim().toUpperCase())) { total += ptosFase; } });
             });
-            
-            for (let i = 1; i <= 4; i++) {
-                if (apuesta.posiciones?.[i] && apuesta.posiciones[i].trim().toUpperCase() === reales.posiciones?.[i]?.trim().toUpperCase()) {
-                    total += PUNTOS[`POS_${i}`];
-                }
-            }
-            
-            (apuesta.goleadores || []).forEach(g => {
-                total += obtenerGolesJugador(g, reales) * PUNTOS.GOLEADOR;
-            });
-
+            for (let i = 1; i <= 4; i++) { if (apuesta.posiciones?.[i] && apuesta.posiciones[i].trim().toUpperCase() === reales.posiciones?.[i]?.trim().toUpperCase()) { total += PUNTOS[`POS_${i}`]; } }
+            (apuesta.goleadores || []).forEach(g => { total += obtenerGolesJugador(g, reales) * PUNTOS.GOLEADOR; });
             return total;
         }
 
@@ -145,16 +114,8 @@
 
             useEffect(() => {
                 const t = `?t=${new Date().getTime()}`;
-                
-                fetch(`./resultados.json${t}`)
-                    .then(res => res.json())
-                    .then(data => setResultadosReales(data))
-                    .catch(() => console.log("resultados.json no encontrado"));
-
-                fetch(`./participantes.json${t}`)
-                    .then(res => res.json())
-                    .then(data => setParticipantes(data))
-                    .catch(() => console.log("participantes.json no encontrado"));
+                fetch(`./resultados.json${t}`).then(res => res.json()).then(data => setResultadosReales(data)).catch(() => console.log("resultados.json no encontrado"));
+                fetch(`./participantes.json${t}`).then(res => res.json()).then(data => setParticipantes(data)).catch(() => console.log("participantes.json no encontrado"));
             }, []);
 
             return (
@@ -194,51 +155,48 @@
             const [posiciones, setPosiciones] = useState({ 1: '', 2: '', 3: '', 4: '' });
             
             const [clasificados, setClasificados] = useState({
-                dieciseisavos: Array(32).fill(''),
-                octavos: Array(16).fill(''),
-                cuartos: Array(8).fill(''),
-                semifinales: Array(4).fill(''),
-                final: Array(2).fill('')
+                dieciseisavos: Array(32).fill(''), octavos: Array(16).fill(''), cuartos: Array(8).fill(''), semifinales: Array(4).fill(''), final: Array(2).fill('')
             });
 
-            const prevencionTeclasInvalidas = (e) => {
-                if (['e', 'E', '+', '-', '.', ','].includes(e.key)) {
-                    e.preventDefault();
+            // Lógica de salto automático al introducir goles
+            const handleCambioGol = (id, campo, valor) => {
+                // Forzar solo números y máximo 2 dígitos
+                let num = valor.replace(/\D/g, '').slice(0, 2);
+                setPartidos(prev => ({ ...prev, [id]: { ...prev[id], [campo]: num } }));
+
+                // Salto automático si se escribe 1 dígito
+                if (num.length === 1) {
+                    if (campo === 'golesL') {
+                        document.getElementById(`gol-${id}-V`)?.focus();
+                    } else {
+                        const idx = TODOS_LOS_PARTIDOS.findIndex(p => p.id === id);
+                        if (idx >= 0 && idx < TODOS_LOS_PARTIDOS.length - 1) {
+                            const nextId = TODOS_LOS_PARTIDOS[idx + 1].id;
+                            document.getElementById(`gol-${nextId}-L`)?.focus();
+                        } else if (idx === TODOS_LOS_PARTIDOS.length - 1) {
+                            document.getElementById(`gol-${id}-V`)?.blur(); // Ocultar teclado al terminar
+                        }
+                    }
                 }
             };
 
-            const handleCambioGol = (id, campo, valor) => {
-                setPartidos(prev => ({ ...prev, [id]: { ...prev[id], [campo]: valor } }));
-            };
-
             const handleClasificado = (fase, index, valor) => {
-                const nuevos = [...clasificados[fase]];
-                nuevos[index] = valor;
-                setClasificados({...clasificados, [fase]: nuevos});
+                const nuevos = [...clasificados[fase]]; nuevos[index] = valor; setClasificados({...clasificados, [fase]: nuevos});
             };
 
             const validarFormulario = () => {
                 if (!usuario.nombre.trim()) return "Falta tu Apellido o Mote.";
-
-                const faltanPartidos = Object.values(partidos).some(p => p.golesL === '' || p.golesV === '');
-                if (faltanPartidos) return "Faltan resultados en la fase de grupos.";
-
+                if (Object.values(partidos).some(p => p.golesL === '' || p.golesV === '')) return "Faltan resultados en la fase de grupos.";
                 const fases = ['dieciseisavos', 'octavos', 'cuartos', 'semifinales', 'final'];
                 for (const fase of fases) {
                     if (clasificados[fase].some(eq => eq === '')) return `Faltan equipos en ${fase}.`;
-                    
                     const sinVacios = clasificados[fase].filter(eq => eq !== '');
-                    if (new Set(sinVacios).size !== sinVacios.length) {
-                        return `Hay equipos repetidos en la fase de ${fase}.`;
-                    }
+                    if (new Set(sinVacios).size !== sinVacios.length) return `Hay equipos repetidos en la fase de ${fase}.`;
                 }
-
                 if ([1, 2, 3, 4].some(num => posiciones[num] === '')) return "Faltan posiciones en el podio.";
                 const equiposPodio = [1, 2, 3, 4].map(num => posiciones[num]).filter(eq => eq !== '');
                 if (new Set(equiposPodio).size !== equiposPodio.length) return "Hay equipos repetidos en el podio.";
-
                 if (goleadores.some(g => g.trim() === '')) return "Faltan goleadores por elegir.";
-
                 return null;
             };
 
@@ -247,15 +205,11 @@
             const procesarYDescargar = () => {
                 if (errorValidacion) return;
 
-                const confirmacion = window.confirm("¡Atención!\n\nSe va a descargar el archivo de tu apuesta.\nEs imprescindible que envíes el archivo .json resultante al administrador para confirmar tu participación.\n\n¿Deseas continuar?");
+                const confirmacion = window.confirm("¡Atención!\n\nSe va a descargar el archivo de tu apuesta en formato JSON.\nEs imprescindible que envíes este archivo al administrador para confirmar tu participación.\n\n¿Deseas continuar?");
                 if (!confirmacion) return;
 
-                const payload = { 
-                    nombre: usuario.nombre, 
-                    apuesta: { partidos, goleadores, posiciones, clasificados } 
-                };
+                const payload = { nombre: usuario.nombre, apuesta: { partidos, goleadores, posiciones, clasificados } };
                 const nombreLimpio = usuario.nombre.trim().replace(/\s+/g, '_');
-
                 const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload));
                 const dlAnchor = document.createElement('a');
                 dlAnchor.setAttribute("href", dataStr);
@@ -289,8 +243,8 @@
                                             <div key={partido.id} class="flex items-center justify-between text-xs bg-white/10 p-2 rounded-lg border border-white/10 text-white">
                                                 <span class="w-2/5 text-right font-medium truncate drop-shadow">{bandera(partido.local)}</span>
                                                 <div class="flex items-center space-x-1 mx-1">
-                                                    <input type="number" min="0" onKeyDown={prevencionTeclasInvalidas} class="w-8 text-center border-none rounded font-bold p-1 bg-white/90 text-slate-900 focus:bg-white focus:ring-2 focus:ring-yellow-400" value={partidos[partido.id].golesL} onChange={e => handleCambioGol(partido.id, 'golesL', e.target.value)} />
-                                                    <input type="number" min="0" onKeyDown={prevencionTeclasInvalidas} class="w-8 text-center border-none rounded font-bold p-1 bg-white/90 text-slate-900 focus:bg-white focus:ring-2 focus:ring-yellow-400" value={partidos[partido.id].golesV} onChange={e => handleCambioGol(partido.id, 'golesV', e.target.value)} />
+                                                    <input id={`gol-${partido.id}-L`} type="text" inputMode="numeric" pattern="[0-9]*" class="w-8 text-center border-none rounded font-bold p-1 bg-white/90 text-slate-900 focus:bg-white focus:ring-2 focus:ring-yellow-400" value={partidos[partido.id].golesL} onChange={e => handleCambioGol(partido.id, 'golesL', e.target.value)} onFocus={e => e.target.select()} />
+                                                    <input id={`gol-${partido.id}-V`} type="text" inputMode="numeric" pattern="[0-9]*" class="w-8 text-center border-none rounded font-bold p-1 bg-white/90 text-slate-900 focus:bg-white focus:ring-2 focus:ring-yellow-400" value={partidos[partido.id].golesV} onChange={e => handleCambioGol(partido.id, 'golesV', e.target.value)} onFocus={e => e.target.select()} />
                                                 </div>
                                                 <span class="w-2/5 text-left font-medium truncate drop-shadow">{bandera(partido.visitante)}</span>
                                             </div>
@@ -592,7 +546,7 @@
         }
 
         function SeccionRanking({ participantes, reales }) {
-            if (!participantes || participantes.length === 0) return <div class="text-center p-12 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 text-white/60 font-medium shadow-xl">Sin participantes registrados.</div>;
+            if (!participantes || participantes.length === 0) return <div class="text-center p-12 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 text-white/60 font-medium shadow-xl">Sin participantes registrados en el sistema.</div>;
             const tablaOrdenada = participantes.map(p => ({ nombre: p.nombre, puntos: calcularPorraTotal(p.apuesta, reales) })).sort((a, b) => b.puntos - a.puntos);
 
             return (
