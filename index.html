@@ -97,6 +97,15 @@
             return 0;
         }
 
+        function obtenerGolesJugador(nombreJugador, reales) {
+            if (!nombreJugador || !reales || !reales.golesJugadores) return 0;
+            const nombreLimpio = nombreJugador.trim().toUpperCase();
+            
+            // Busca la clave en el JSON real ignorando mayusculas y minusculas
+            const claveEncontrada = Object.keys(reales.golesJugadores).find(k => k.trim().toUpperCase() === nombreLimpio);
+            return claveEncontrada ? reales.golesJugadores[claveEncontrada] : 0;
+        }
+
         function calcularPorraTotal(apuesta, reales) {
             if (!reales) return 0;
             let total = 0;
@@ -125,12 +134,10 @@
             }
             
             (apuesta.goleadores || []).forEach(g => {
-                if (g) {
-                    const jugadorLimpio = g.trim().toUpperCase();
-                    const golesReal = reales.golesJugadores?.[jugadorLimpio] || 0;
-                    total += golesReal * PUNTOS.GOLEADOR;
-                }
+                const golesReales = obtenerGolesJugador(g, reales);
+                total += golesReales * PUNTOS.GOLEADOR;
             });
+
             return total;
         }
 
@@ -547,8 +554,7 @@
                                 <h3 class="font-bold text-slate-800 mb-3 text-base">Goleadores</h3>
                                 <div class="space-y-2 text-sm">
                                     {(actual.apuesta.goleadores || []).map((g, i) => {
-                                        const jugadorLimpio = g ? g.trim().toUpperCase() : '';
-                                        const golesReal = reales?.golesJugadores?.[jugadorLimpio] || 0;
+                                        const golesReal = obtenerGolesJugador(g, reales);
                                         const colorBg = golesReal > 0 ? 'bg-green-100 border-green-300' : 'bg-slate-50 border-slate-200';
 
                                         return (
