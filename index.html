@@ -17,7 +17,6 @@
     <script type="text/babel">
         const { useState, useEffect } = React;
 
-        // Grupos ordenados estrictamente por bombos oficiales de la FIFA (A1, A2, A3, A4)
         const GRUPOS = {
             A: ["MEXICO", "SUDAFRICA", "COREA DEL SUR", "CHEQUIA"],
             B: ["CANADA", "BOSNIA", "QATAR", "SUIZA"],
@@ -33,9 +32,25 @@
             L: ["INGLATERRA", "CROACIA", "GHANA", "PANAMA"]
         };
 
+        const BANDERAS = {
+            "MEXICO": "🇲🇽", "SUDAFRICA": "🇿🇦", "COREA DEL SUR": "🇰🇷", "CHEQUIA": "🇨🇿",
+            "CANADA": "🇨🇦", "BOSNIA": "🇧🇦", "QATAR": "🇶🇦", "SUIZA": "🇨🇭",
+            "BRASIL": "🇧🇷", "MARRUECOS": "🇲🇦", "HAITI": "🇭🇹", "ESCOCIA": "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
+            "EEUU": "🇺🇸", "PARAGUAY": "🇵🇾", "AUSTRALIA": "🇦🇺", "TURQUIA": "🇹🇷",
+            "ALEMANIA": "🇩🇪", "CURAZAO": "🇨🇼", "COSTA DE MARFIL": "🇨🇮", "ECUADOR": "🇪🇨",
+            "PAISES BAJOS": "🇳🇱", "JAPON": "🇯🇵", "SUECIA": "🇸🇪", "TUNEZ": "🇹🇳",
+            "BELGICA": "🇧🇪", "EGIPTO": "🇪🇬", "IRAN": "🇮🇷", "NUEVA ZELANDA": "🇳🇿",
+            "ESPAÑA": "🇪🇸", "CABO VERDE": "🇨🇻", "ARABIA SAUDI": "🇸🇦", "URUGUAY": "🇺🇾",
+            "FRANCIA": "🇫🇷", "SENEGAL": "🇸🇳", "IRAK": "🇮🇶", "NORUEGA": "🇳🇴",
+            "ARGENTINA": "🇦🇷", "ARGELIA": "🇩🇿", "AUSTRIA": "🇦🇹", "JORDANIA": "🇯🇴",
+            "PORTUGAL": "🇵🇹", "RD CONGO": "🇨🇩", "UZBEKISTAN": "🇺🇿", "COLOMBIA": "🇨🇴",
+            "INGLATERRA": "🏴󠁧󠁢󠁥󠁮󠁧󠁿", "CROACIA": "🇭🇷", "GHANA": "🇬🇭", "PANAMA": "🇵🇦"
+        };
+
+        const bandera = (eq) => BANDERAS[eq] ? `${BANDERAS[eq]} ${eq}` : (eq || '');
+
         const TODOS_LOS_EQUIPOS = Object.values(GRUPOS).flat().sort();
 
-        // Generador cronológico oficial (Jornada 1, Jornada 2, Jornada 3)
         const generarPartidosPorGrupo = (letra, equipos) => [
             { id: `${letra}1`, local: equipos[0], visitante: equipos[1] },
             { id: `${letra}2`, local: equipos[2], visitante: equipos[3] },
@@ -278,12 +293,12 @@
                                     <div class="space-y-2">
                                         {generarPartidosPorGrupo(letra, GRUPOS[letra]).map(partido => (
                                             <div key={partido.id} class="flex items-center justify-between text-xs bg-white p-2 rounded-lg border shadow-sm">
-                                                <span class="w-2/5 text-right font-medium truncate">{partido.local}</span>
+                                                <span class="w-2/5 text-right font-medium truncate">{bandera(partido.local)}</span>
                                                 <div class="flex items-center space-x-1 mx-1">
                                                     <input type="number" min="0" onKeyDown={prevencionTeclasInvalidas} class="w-8 text-center border rounded font-bold p-1 bg-slate-50" value={partidos[partido.id].golesL} onChange={e => handleCambioGol(partido.id, 'golesL', e.target.value)} />
                                                     <input type="number" min="0" onKeyDown={prevencionTeclasInvalidas} class="w-8 text-center border rounded font-bold p-1 bg-slate-50" value={partidos[partido.id].golesV} onChange={e => handleCambioGol(partido.id, 'golesV', e.target.value)} />
                                                 </div>
-                                                <span class="w-2/5 text-left font-medium truncate">{partido.visitante}</span>
+                                                <span class="w-2/5 text-left font-medium truncate">{bandera(partido.visitante)}</span>
                                             </div>
                                         ))}
                                     </div>
@@ -301,7 +316,7 @@
                                 {clasificados.dieciseisavos.map((v, i) => (
                                     <select key={i} class="border rounded-md p-1.5 text-xs bg-slate-50 w-full outline-none" value={v} onChange={e => handleClasificado('dieciseisavos', i, e.target.value)}>
                                         <option value="">-- Equipo --</option>
-                                        {TODOS_LOS_EQUIPOS.map(eq => <option key={eq} value={eq}>{eq}</option>)}
+                                        {TODOS_LOS_EQUIPOS.map(eq => <option key={eq} value={eq}>{bandera(eq)}</option>)}
                                     </select>
                                 ))}
                             </div>
@@ -313,7 +328,7 @@
                                 {clasificados.octavos.map((v, i) => (
                                     <select key={i} class="border rounded-md p-1.5 text-xs bg-slate-50 w-full outline-none" value={v} onChange={e => handleClasificado('octavos', i, e.target.value)}>
                                         <option value="">-- Equipo --</option>
-                                        {TODOS_LOS_EQUIPOS.map(eq => <option key={eq} value={eq}>{eq}</option>)}
+                                        {TODOS_LOS_EQUIPOS.map(eq => <option key={eq} value={eq}>{bandera(eq)}</option>)}
                                     </select>
                                 ))}
                             </div>
@@ -325,7 +340,7 @@
                                 {clasificados.cuartos.map((v, i) => (
                                     <select key={i} class="border rounded-md p-1.5 text-xs bg-slate-50 w-full outline-none" value={v} onChange={e => handleClasificado('cuartos', i, e.target.value)}>
                                         <option value="">-- Equipo --</option>
-                                        {TODOS_LOS_EQUIPOS.map(eq => <option key={eq} value={eq}>{eq}</option>)}
+                                        {TODOS_LOS_EQUIPOS.map(eq => <option key={eq} value={eq}>{bandera(eq)}</option>)}
                                     </select>
                                 ))}
                             </div>
@@ -338,7 +353,7 @@
                                     {clasificados.semifinales.map((v, i) => (
                                         <select key={i} class="border rounded-md p-1.5 text-xs bg-slate-50 w-full outline-none" value={v} onChange={e => handleClasificado('semifinales', i, e.target.value)}>
                                             <option value="">-- Equipo --</option>
-                                            {TODOS_LOS_EQUIPOS.map(eq => <option key={eq} value={eq}>{eq}</option>)}
+                                            {TODOS_LOS_EQUIPOS.map(eq => <option key={eq} value={eq}>{bandera(eq)}</option>)}
                                         </select>
                                     ))}
                                 </div>
@@ -349,7 +364,7 @@
                                     {clasificados.final.map((v, i) => (
                                         <select key={i} class="border rounded-md p-1.5 text-xs bg-slate-50 border-indigo-200 w-full outline-none" value={v} onChange={e => handleClasificado('final', i, e.target.value)}>
                                             <option value="">-- Finalista --</option>
-                                            {TODOS_LOS_EQUIPOS.map(eq => <option key={eq} value={eq}>{eq}</option>)}
+                                            {TODOS_LOS_EQUIPOS.map(eq => <option key={eq} value={eq}>{bandera(eq)}</option>)}
                                         </select>
                                     ))}
                                 </div>
@@ -366,7 +381,7 @@
                                 {[1, 2, 3, 4].map(num => (
                                     <select key={num} class="border rounded-lg p-2 text-xs font-bold bg-slate-50 border-indigo-100 w-full outline-none" value={posiciones[num]} onChange={e => setPosiciones({...posiciones, [num]: e.target.value})}>
                                         <option value="">-- {num}º Puesto --</option>
-                                        {TODOS_LOS_EQUIPOS.map(eq => <option key={eq} value={eq}>{eq}</option>)}
+                                        {TODOS_LOS_EQUIPOS.map(eq => <option key={eq} value={eq}>{bandera(eq)}</option>)}
                                     </select>
                                 ))}
                             </div>
@@ -376,7 +391,7 @@
                             <h3 class="font-bold text-sm text-slate-700 mb-2">Selección de 5 Goleadores</h3>
                             <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
                                 {goleadores.map((g, i) => (
-                                    <input key={i} type="text" placeholder={`Goleador ${i+1}`} class="border rounded-lg p-2 text-xs bg-slate-50" value={g} onChange={e => { const n = [...goleadores]; n[i] = e.target.value; setGoleadores(n); }} />
+                                    <input key={i} type="text" placeholder={`Goleador ${i+1}`} class="border rounded-lg p-2 text-xs bg-slate-50 uppercase" value={g} onChange={e => { const n = [...goleadores]; n[i] = e.target.value.toUpperCase(); setGoleadores(n); }} />
                                 ))}
                             </div>
                         </div>
@@ -482,7 +497,7 @@
 
                                                 return (
                                                     <div key={partido.id} class={`p-2 rounded border text-xs ${colorBg}`}>
-                                                        <p class="font-bold text-slate-800 truncate">{partido.local} vs {partido.visitante}</p>
+                                                        <p class="font-bold text-slate-800 truncate">{bandera(partido.local)} vs {bandera(partido.visitante)}</p>
                                                         <p class="text-slate-500 font-medium mb-1">📅 {fechaPartido}</p>
                                                         <p class="text-slate-600 mt-1">Apuesta: {pr?.golesL}-{pr?.golesV}</p>
                                                         {jugado && <p class="text-slate-700 font-semibold mt-1">Real: {re.golesL}-{re.golesV} <span class="font-bold">(+{pts}p)</span></p>}
@@ -519,7 +534,7 @@
                                                     colorTag = acertado ? 'bg-green-100 text-green-800 border-green-300 font-bold' : 'bg-red-100 text-red-800 border-red-300 line-through';
                                                     if (acertado) strPuntos = ` (+${ptsFase}p)`;
                                                 }
-                                                return <span key={i} class={`px-2 py-1 rounded text-xs border ${colorTag}`}>{eq}{strPuntos}</span>;
+                                                return <span key={i} class={`px-2 py-1 rounded text-xs border ${colorTag}`}>{bandera(eq)}{strPuntos}</span>;
                                             })}
                                         </div>
                                     </div>
@@ -567,7 +582,7 @@
                                             <div key={num} class={`p-2 rounded flex justify-between border ${colorBg}`}>
                                                 <span class="text-slate-600 font-bold">{num}º Puesto</span>
                                                 <div>
-                                                    <span class="font-bold text-slate-800">{eq || '-'}</span>
+                                                    <span class="font-bold text-slate-800">{eq ? bandera(eq) : '-'}</span>
                                                     {puntosObtenidos > 0 && <span class="ml-2 font-bold text-green-700">+{puntosObtenidos}p</span>}
                                                 </div>
                                             </div>
