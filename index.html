@@ -407,6 +407,47 @@
 
             return (
                 <div class="space-y-6">
+                    <div class="bg-indigo-50 p-5 rounded-2xl border border-indigo-100 shadow-sm text-sm">
+                        <h3 class="font-bold text-indigo-800 mb-3 border-b border-indigo-200 pb-2">📋 Sistema de Puntuación</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 text-indigo-900">
+                            <div>
+                                <strong class="block mb-1">Fase de Grupos</strong>
+                                <ul class="list-disc pl-4 space-y-1 text-xs">
+                                    <li>Pleno exacto: <span class="font-bold">+25p</span></li>
+                                    <li>Ganador + 1 gol: <span class="font-bold">+15p</span></li>
+                                    <li>Empate (sin pleno): <span class="font-bold">+12.5p</span></li>
+                                    <li>Acertar ganador: <span class="font-bold">+10p</span></li>
+                                    <li>Acertar 1 gol: <span class="font-bold">+5p</span></li>
+                                </ul>
+                            </div>
+                            <div>
+                                <strong class="block mb-1">Eliminatorias</strong>
+                                <ul class="list-disc pl-4 space-y-1 text-xs">
+                                    <li>Pasa a 1/16: <span class="font-bold">+10p</span></li>
+                                    <li>Pasa a 1/8: <span class="font-bold">+20p</span></li>
+                                    <li>Pasa a 1/4: <span class="font-bold">+30p</span></li>
+                                    <li>Pasa a Semis: <span class="font-bold">+40p</span></li>
+                                    <li>Llega a Final: <span class="font-bold">+50p</span></li>
+                                </ul>
+                            </div>
+                            <div>
+                                <strong class="block mb-1">Podio Exacto</strong>
+                                <ul class="list-disc pl-4 space-y-1 text-xs">
+                                    <li>1º Puesto: <span class="font-bold">+80p</span></li>
+                                    <li>2º Puesto: <span class="font-bold">+60p</span></li>
+                                    <li>3º Puesto: <span class="font-bold">+40p</span></li>
+                                    <li>4º Puesto: <span class="font-bold">+20p</span></li>
+                                </ul>
+                            </div>
+                            <div>
+                                <strong class="block mb-1">Goleadores</strong>
+                                <ul class="list-disc pl-4 space-y-1 text-xs">
+                                    <li>Por cada gol real: <span class="font-bold">+5p</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="bg-white p-4 rounded-xl border flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
                         <select class="border p-2 rounded-xl bg-white text-sm font-bold text-slate-700 outline-none w-full sm:w-64" value={seleccionado || actual.nombre} onChange={e => setSeleccionado(e.target.value)}>
                             {participantes.map(p => <option key={p.nombre} value={p.nombre}>{p.nombre}</option>)}
@@ -418,27 +459,36 @@
                     </div>
 
                     <div class="bg-white p-5 rounded-2xl border shadow-sm">
-                        <h3 class="font-bold text-slate-800 mb-3 text-base">Fase de Grupos</h3>
-                        <div class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-2">
-                            {TODOS_LOS_PARTIDOS.map(partido => {
-                                const pr = actual.apuesta.partidos?.[partido.id];
-                                const re = reales?.partidos?.[partido.id];
-                                const pts = calcularPuntosPartido(pr, re);
-                                const jugado = re && re.golesL !== undefined && re.golesL !== '';
-
-                                // Evaluacion de color basada en puntos obtenidos
-                                let colorBg = 'bg-slate-50 border-slate-200';
-                                if (jugado) {
-                                    if (pts === 25) colorBg = 'bg-green-100 border-green-400';
-                                    else if (pts > 0) colorBg = 'bg-orange-100 border-orange-400';
-                                    else colorBg = 'bg-red-100 border-red-400';
-                                }
-
+                        <h3 class="font-bold text-slate-800 mb-4 text-lg border-b border-slate-100 pb-2">Fase de Grupos</h3>
+                        <div class="space-y-4">
+                            {Object.keys(GRUPOS).map(letra => {
+                                const partidosGrupo = generarPartidosPorGrupo(letra, GRUPOS[letra]);
                                 return (
-                                    <div key={partido.id} class={`p-2 rounded border text-xs ${colorBg}`}>
-                                        <p class="font-bold text-slate-800 truncate">{partido.local} vs {partido.visitante}</p>
-                                        <p class="text-slate-600 mt-1">Apuesta: {pr?.golesL}-{pr?.golesV}</p>
-                                        {jugado && <p class="text-slate-700 font-semibold mt-1">Real: {re.golesL}-{re.golesV} (+{pts}p)</p>}
+                                    <div key={letra} class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                        <h4 class="font-black text-indigo-600 text-xs uppercase mb-2 border-b border-indigo-100 pb-1">Grupo {letra}</h4>
+                                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+                                            {partidosGrupo.map(partido => {
+                                                const pr = actual.apuesta.partidos?.[partido.id];
+                                                const re = reales?.partidos?.[partido.id];
+                                                const pts = calcularPuntosPartido(pr, re);
+                                                const jugado = re && re.golesL !== undefined && re.golesL !== '';
+
+                                                let colorBg = 'bg-white border-slate-200';
+                                                if (jugado) {
+                                                    if (pts === 25) colorBg = 'bg-green-100 border-green-400';
+                                                    else if (pts > 0) colorBg = 'bg-orange-100 border-orange-400';
+                                                    else colorBg = 'bg-red-100 border-red-400';
+                                                }
+
+                                                return (
+                                                    <div key={partido.id} class={`p-2 rounded border text-xs ${colorBg}`}>
+                                                        <p class="font-bold text-slate-800 truncate">{partido.local} vs {partido.visitante}</p>
+                                                        <p class="text-slate-600 mt-1">Apuesta: {pr?.golesL}-{pr?.golesV}</p>
+                                                        {jugado && <p class="text-slate-700 font-semibold mt-1">Real: {re.golesL}-{re.golesV} <span class="font-bold">(+{pts}p)</span></p>}
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
                                     </div>
                                 );
                             })}
@@ -451,6 +501,7 @@
                             {['dieciseisavos', 'octavos', 'cuartos', 'semifinales', 'final'].map(fase => {
                                 const realesFase = reales?.clasificados?.[fase] || [];
                                 const faseEmpezada = realesFase.length > 0;
+                                const ptsFase = PUNTOS[fase.toUpperCase()];
 
                                 return (
                                     <div key={fase}>
@@ -459,13 +510,15 @@
                                             {(actual.apuesta.clasificados?.[fase] || []).map((eq, i) => {
                                                 if (!eq) return null;
                                                 
-                                                // Color por acierto en clasificacion de equipos
                                                 let colorTag = 'bg-slate-100 text-slate-700 border-slate-200';
+                                                let strPuntos = '';
+
                                                 if (faseEmpezada) {
                                                     const acertado = realesFase.some(r => r.trim().toUpperCase() === eq.trim().toUpperCase());
-                                                    colorTag = acertado ? 'bg-green-100 text-green-800 border-green-300' : 'bg-red-100 text-red-800 border-red-300';
+                                                    colorTag = acertado ? 'bg-green-100 text-green-800 border-green-300 font-bold' : 'bg-red-100 text-red-800 border-red-300 line-through';
+                                                    if (acertado) strPuntos = ` (+${ptsFase}p)`;
                                                 }
-                                                return <span key={i} class={`px-2 py-1 rounded text-xs border ${colorTag}`}>{eq}</span>;
+                                                return <span key={i} class={`px-2 py-1 rounded text-xs border ${colorTag}`}>{eq}{strPuntos}</span>;
                                             })}
                                         </div>
                                     </div>
@@ -480,8 +533,6 @@
                                     {(actual.apuesta.goleadores || []).map((g, i) => {
                                         const jugadorLimpio = g ? g.trim().toUpperCase() : '';
                                         const golesReal = reales?.golesJugadores?.[jugadorLimpio] || 0;
-                                        
-                                        // Color por acumulacion de goles (no hay finalizado en goleadores)
                                         const colorBg = golesReal > 0 ? 'bg-green-100 border-green-300' : 'bg-slate-50 border-slate-200';
 
                                         return (
@@ -502,17 +553,22 @@
                                         const realEq = reales?.posiciones?.[num];
                                         const podioRelleno = realEq && realEq.trim() !== '';
                                         
-                                        // Color por acierto de posicion final exacta
                                         let colorBg = 'bg-slate-50 border-slate-200';
+                                        let puntosObtenidos = 0;
+
                                         if (podioRelleno) {
                                             const acertado = realEq.trim().toUpperCase() === (eq ? eq.trim().toUpperCase() : '');
                                             colorBg = acertado ? 'bg-green-100 border-green-300' : 'bg-red-100 border-red-300';
+                                            if (acertado) puntosObtenidos = PUNTOS[`POS_${num}`];
                                         }
 
                                         return (
                                             <div key={num} class={`p-2 rounded flex justify-between border ${colorBg}`}>
                                                 <span class="text-slate-600 font-bold">{num}º Puesto</span>
-                                                <span class="font-bold text-slate-800">{eq || '-'}</span>
+                                                <div>
+                                                    <span class="font-bold text-slate-800">{eq || '-'}</span>
+                                                    {puntosObtenidos > 0 && <span class="ml-2 font-bold text-green-700">+{puntosObtenidos}p</span>}
+                                                </div>
                                             </div>
                                         );
                                     })}
