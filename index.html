@@ -37,12 +37,12 @@
 
         // Generador cronológico oficial (Jornada 1, Jornada 2, Jornada 3)
         const generarPartidosPorGrupo = (letra, equipos) => [
-            { id: `${letra}1`, local: equipos[0], visitante: equipos[1] }, // J1
-            { id: `${letra}2`, local: equipos[2], visitante: equipos[3] }, // J1
-            { id: `${letra}3`, local: equipos[3], visitante: equipos[1] }, // J2
-            { id: `${letra}4`, local: equipos[0], visitante: equipos[2] }, // J2
-            { id: `${letra}5`, local: equipos[0], visitante: equipos[3] }, // J3
-            { id: `${letra}6`, local: equipos[1], visitante: equipos[2] }  // J3
+            { id: `${letra}1`, local: equipos[0], visitante: equipos[1] },
+            { id: `${letra}2`, local: equipos[2], visitante: equipos[3] },
+            { id: `${letra}3`, local: equipos[3], visitante: equipos[1] },
+            { id: `${letra}4`, local: equipos[0], visitante: equipos[2] },
+            { id: `${letra}5`, local: equipos[0], visitante: equipos[3] },
+            { id: `${letra}6`, local: equipos[1], visitante: equipos[2] }
         ];
 
         const TODOS_LOS_PARTIDOS = Object.keys(GRUPOS).reduce((acc, letra) => {
@@ -471,6 +471,7 @@
                                                 const re = reales?.partidos?.[partido.id];
                                                 const pts = calcularPuntosPartido(pr, re);
                                                 const jugado = re && re.golesL !== undefined && re.golesL !== '';
+                                                const fechaPartido = re?.fecha || 'Por definir';
 
                                                 let colorBg = 'bg-white border-slate-200';
                                                 if (jugado) {
@@ -482,6 +483,7 @@
                                                 return (
                                                     <div key={partido.id} class={`p-2 rounded border text-xs ${colorBg}`}>
                                                         <p class="font-bold text-slate-800 truncate">{partido.local} vs {partido.visitante}</p>
+                                                        <p class="text-slate-500 font-medium mb-1">📅 {fechaPartido}</p>
                                                         <p class="text-slate-600 mt-1">Apuesta: {pr?.golesL}-{pr?.golesV}</p>
                                                         {jugado && <p class="text-slate-700 font-semibold mt-1">Real: {re.golesL}-{re.golesV} <span class="font-bold">(+{pts}p)</span></p>}
                                                     </div>
