@@ -165,7 +165,7 @@
         }
 
         function FormularioInscripcion() {
-            const [usuario, setUsuario] = useState({ nombre: '', telefono: '' });
+            const [usuario, setUsuario] = useState({ nombre: '' });
             const [partidos, setPartidos] = useState(TODOS_LOS_PARTIDOS.reduce((acc, p) => ({ ...acc, [p.id]: { golesL: '', golesV: '' } }), {}));
             const [goleadores, setGoleadores] = useState(['', '', '', '', '']);
             const [posiciones, setPosiciones] = useState({ 1: '', 2: '', 3: '', 4: '' });
@@ -195,7 +195,7 @@
             };
 
             const validarFormulario = () => {
-                if (!usuario.nombre.trim() || !usuario.telefono.trim()) return "Faltan datos personales.";
+                if (!usuario.nombre.trim()) return "Falta tu Apellido o Mote.";
 
                 const faltanPartidos = Object.values(partidos).some(p => p.golesL === '' || p.golesV === '');
                 if (faltanPartidos) return "Faltan resultados en la fase de grupos.";
@@ -226,7 +226,6 @@
 
                 const payload = { 
                     nombre: usuario.nombre, 
-                    telefono: usuario.telefono, 
                     apuesta: { partidos, goleadores, posiciones, clasificados } 
                 };
                 const nombreLimpio = usuario.nombre.trim().replace(/\s+/g, '_');
@@ -244,18 +243,17 @@
                 
                 doc.setFont("Helvetica", "bold"); doc.text("RESGUARDO OFICIAL", 14, 20);
                 doc.setFont("Helvetica", "normal"); doc.text(`Participante: ${usuario.nombre}`, 14, 30);
-                doc.text(`Teléfono: ${usuario.telefono}`, 14, 36);
                 
-                doc.setFont("Helvetica", "bold"); doc.text("Goleadores:", 14, 50);
+                doc.setFont("Helvetica", "bold"); doc.text("Goleadores:", 14, 44);
                 doc.setFont("Helvetica", "normal");
-                goleadores.forEach((g, i) => doc.text(`- Goleador ${i+1}: ${g || 'No indicado'}`, 14, 58 + (i * 6)));
+                goleadores.forEach((g, i) => doc.text(`- Goleador ${i+1}: ${g || 'No indicado'}`, 14, 52 + (i * 6)));
 
-                doc.setFont("Helvetica", "bold"); doc.text("Clasificación Final (4 primeros):", 14, 95);
+                doc.setFont("Helvetica", "bold"); doc.text("Clasificación Final (4 primeros):", 14, 89);
                 doc.setFont("Helvetica", "normal");
-                doc.text(`1º: ${posiciones[1] || '---'}`, 14, 103);
-                doc.text(`2º: ${posiciones[2] || '---'}`, 14, 110);
-                doc.text(`3º: ${posiciones[3] || '---'}`, 14, 117);
-                doc.text(`4º: ${posiciones[4] || '---'}`, 14, 124);
+                doc.text(`1º: ${posiciones[1] || '---'}`, 14, 97);
+                doc.text(`2º: ${posiciones[2] || '---'}`, 14, 104);
+                doc.text(`3º: ${posiciones[3] || '---'}`, 14, 111);
+                doc.text(`4º: ${posiciones[4] || '---'}`, 14, 118);
 
                 doc.save(`Resguardo_Porra_${nombreLimpio}.pdf`);
             };
@@ -263,10 +261,9 @@
             return (
                 <div class="space-y-6 max-w-4xl mx-auto">
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-                        <h2 class="text-lg font-bold text-slate-800 mb-4">1. Datos Personales</h2>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <input type="text" placeholder="Tu Apellido o Mote" class="border rounded-xl p-3 text-sm outline-none bg-slate-50 focus:bg-white" value={usuario.nombre} onChange={e => setUsuario({...usuario, nombre: e.target.value})} />
-                            <input type="text" placeholder="Número de Teléfono" class="border rounded-xl p-3 text-sm outline-none bg-slate-50 focus:bg-white" value={usuario.telefono} onChange={e => setUsuario({...usuario, telefono: e.target.value})} />
+                        <h2 class="text-lg font-bold text-slate-800 mb-4">1. Identificación</h2>
+                        <div class="max-w-md">
+                            <input type="text" placeholder="Escribe tu Apellido o Mote" class="w-full border rounded-xl p-3 text-sm outline-none bg-slate-50 focus:bg-white" value={usuario.nombre} onChange={e => setUsuario({nombre: e.target.value})} />
                         </div>
                     </div>
 
