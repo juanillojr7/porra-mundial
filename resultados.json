@@ -88,10 +88,10 @@
       "ALEMANIA", "ARABIA SAUDI", "ARGELIA", "ARGENTINA", "AUSTRALIA", "AUSTRIA", "BELGICA", "BOSNIA"
     ],
     "semifinales": [
-      "ARGELIA", "ARGENTINA","ALEMANIA", "ARABIA SAUDI"
+      "", "","ALEMANIA", "ARABIA SAUDI"
     ],
     "final": [
-      "ALEMANIA", "ARABIA SAUDI"
+      "", ""
     ]
   },
   "posiciones": {
