@@ -51,6 +51,7 @@
 
         const TODOS_LOS_EQUIPOS = Object.values(GRUPOS).flat().sort();
 
+        // Generador cronologico de enfrentamientos
         const generarPartidosPorGrupo = (letra, equipos) => [
             { id: `${letra}1`, local: equipos[0], visitante: equipos[1] },
             { id: `${letra}2`, local: equipos[2], visitante: equipos[3] },
@@ -97,11 +98,10 @@
             return 0;
         }
 
+        // Busqueda insensible a mayusculas/minusculas
         function obtenerGolesJugador(nombreJugador, reales) {
             if (!nombreJugador || !reales || !reales.golesJugadores) return 0;
             const nombreLimpio = nombreJugador.trim().toUpperCase();
-            
-            // Busca la clave en el JSON real ignorando mayusculas y minusculas
             const claveEncontrada = Object.keys(reales.golesJugadores).find(k => k.trim().toUpperCase() === nombreLimpio);
             return claveEncontrada ? reales.golesJugadores[claveEncontrada] : 0;
         }
@@ -134,8 +134,7 @@
             }
             
             (apuesta.goleadores || []).forEach(g => {
-                const golesReales = obtenerGolesJugador(g, reales);
-                total += golesReales * PUNTOS.GOLEADOR;
+                total += obtenerGolesJugador(g, reales) * PUNTOS.GOLEADOR;
             });
 
             return total;
@@ -245,8 +244,12 @@
 
             const errorValidacion = validarFormulario();
 
+            // Ejecucion de descarga secuencial
             const procesarYDescargar = () => {
                 if (errorValidacion) return;
+
+                const confirmacion = window.confirm("¡Atención!\n\nSe va a descargar el archivo de tu apuesta.\nEs imprescindible que envíes el archivo .json resultante al administrador para confirmar tu participación.\n\n¿Deseas continuar?");
+                if (!confirmacion) return;
 
                 const payload = { 
                     nombre: usuario.nombre, 
@@ -262,24 +265,26 @@
                 dlAnchor.click();
                 dlAnchor.remove();
 
-                const { jsPDF } = window.jspdf;
-                const doc = new jsPDF();
-                
-                doc.setFont("Helvetica", "bold"); doc.text("RESGUARDO OFICIAL", 14, 20);
-                doc.setFont("Helvetica", "normal"); doc.text(`Participante: ${usuario.nombre}`, 14, 30);
-                
-                doc.setFont("Helvetica", "bold"); doc.text("Goleadores:", 14, 44);
-                doc.setFont("Helvetica", "normal");
-                goleadores.forEach((g, i) => doc.text(`- Goleador ${i+1}: ${g || 'No indicado'}`, 14, 52 + (i * 6)));
+                setTimeout(() => {
+                    const { jsPDF } = window.jspdf;
+                    const doc = new jsPDF();
+                    
+                    doc.setFont("Helvetica", "bold"); doc.text("RESGUARDO OFICIAL", 14, 20);
+                    doc.setFont("Helvetica", "normal"); doc.text(`Participante: ${usuario.nombre}`, 14, 30);
+                    
+                    doc.setFont("Helvetica", "bold"); doc.text("Goleadores:", 14, 44);
+                    doc.setFont("Helvetica", "normal");
+                    goleadores.forEach((g, i) => doc.text(`- Goleador ${i+1}: ${g || 'No indicado'}`, 14, 52 + (i * 6)));
 
-                doc.setFont("Helvetica", "bold"); doc.text("Clasificación Final (4 primeros):", 14, 89);
-                doc.setFont("Helvetica", "normal");
-                doc.text(`1º: ${posiciones[1] || '---'}`, 14, 97);
-                doc.text(`2º: ${posiciones[2] || '---'}`, 14, 104);
-                doc.text(`3º: ${posiciones[3] || '---'}`, 14, 111);
-                doc.text(`4º: ${posiciones[4] || '---'}`, 14, 118);
+                    doc.setFont("Helvetica", "bold"); doc.text("Clasificacion Final (4 primeros):", 14, 89);
+                    doc.setFont("Helvetica", "normal");
+                    doc.text(`1o: ${posiciones[1] || '---'}`, 14, 97);
+                    doc.text(`2o: ${posiciones[2] || '---'}`, 14, 104);
+                    doc.text(`3o: ${posiciones[3] || '---'}`, 14, 111);
+                    doc.text(`4o: ${posiciones[4] || '---'}`, 14, 118);
 
-                doc.save(`Resguardo_Porra_${nombreLimpio}.pdf`);
+                    doc.save(`Resguardo_Porra_${nombreLimpio}.pdf`);
+                }, 800);
             };
 
             return (
@@ -323,7 +328,7 @@
                                 {clasificados.dieciseisavos.map((v, i) => (
                                     <select key={i} class="border rounded-md p-1.5 text-xs bg-slate-50 w-full outline-none" value={v} onChange={e => handleClasificado('dieciseisavos', i, e.target.value)}>
                                         <option value="">-- Equipo --</option>
-                                        {TODOS_LOS_EQUIPOS.map(eq => <option key={eq} value={eq}>{bandera(eq)}</option>)}
+                                        {TODOS_LOS_EQUIPOS.map(eq => <option key={eq} value={eq} disabled={clasificados.dieciseisavos.includes(eq) && eq !== v}>{bandera(eq)}</option>)}
                                     </select>
                                 ))}
                             </div>
@@ -335,7 +340,7 @@
                                 {clasificados.octavos.map((v, i) => (
                                     <select key={i} class="border rounded-md p-1.5 text-xs bg-slate-50 w-full outline-none" value={v} onChange={e => handleClasificado('octavos', i, e.target.value)}>
                                         <option value="">-- Equipo --</option>
-                                        {TODOS_LOS_EQUIPOS.map(eq => <option key={eq} value={eq}>{bandera(eq)}</option>)}
+                                        {TODOS_LOS_EQUIPOS.map(eq => <option key={eq} value={eq} disabled={clasificados.octavos.includes(eq) && eq !== v}>{bandera(eq)}</option>)}
                                     </select>
                                 ))}
                             </div>
@@ -347,7 +352,7 @@
                                 {clasificados.cuartos.map((v, i) => (
                                     <select key={i} class="border rounded-md p-1.5 text-xs bg-slate-50 w-full outline-none" value={v} onChange={e => handleClasificado('cuartos', i, e.target.value)}>
                                         <option value="">-- Equipo --</option>
-                                        {TODOS_LOS_EQUIPOS.map(eq => <option key={eq} value={eq}>{bandera(eq)}</option>)}
+                                        {TODOS_LOS_EQUIPOS.map(eq => <option key={eq} value={eq} disabled={clasificados.cuartos.includes(eq) && eq !== v}>{bandera(eq)}</option>)}
                                     </select>
                                 ))}
                             </div>
@@ -360,7 +365,7 @@
                                     {clasificados.semifinales.map((v, i) => (
                                         <select key={i} class="border rounded-md p-1.5 text-xs bg-slate-50 w-full outline-none" value={v} onChange={e => handleClasificado('semifinales', i, e.target.value)}>
                                             <option value="">-- Equipo --</option>
-                                            {TODOS_LOS_EQUIPOS.map(eq => <option key={eq} value={eq}>{bandera(eq)}</option>)}
+                                            {TODOS_LOS_EQUIPOS.map(eq => <option key={eq} value={eq} disabled={clasificados.semifinales.includes(eq) && eq !== v}>{bandera(eq)}</option>)}
                                         </select>
                                     ))}
                                 </div>
@@ -371,7 +376,7 @@
                                     {clasificados.final.map((v, i) => (
                                         <select key={i} class="border rounded-md p-1.5 text-xs bg-slate-50 border-indigo-200 w-full outline-none" value={v} onChange={e => handleClasificado('final', i, e.target.value)}>
                                             <option value="">-- Finalista --</option>
-                                            {TODOS_LOS_EQUIPOS.map(eq => <option key={eq} value={eq}>{bandera(eq)}</option>)}
+                                            {TODOS_LOS_EQUIPOS.map(eq => <option key={eq} value={eq} disabled={clasificados.final.includes(eq) && eq !== v}>{bandera(eq)}</option>)}
                                         </select>
                                     ))}
                                 </div>
@@ -388,7 +393,7 @@
                                 {[1, 2, 3, 4].map(num => (
                                     <select key={num} class="border rounded-lg p-2 text-xs font-bold bg-slate-50 border-indigo-100 w-full outline-none" value={posiciones[num]} onChange={e => setPosiciones({...posiciones, [num]: e.target.value})}>
                                         <option value="">-- {num}º Puesto --</option>
-                                        {TODOS_LOS_EQUIPOS.map(eq => <option key={eq} value={eq}>{bandera(eq)}</option>)}
+                                        {TODOS_LOS_EQUIPOS.map(eq => <option key={eq} value={eq} disabled={Object.values(posiciones).includes(eq) && eq !== posiciones[num]}>{bandera(eq)}</option>)}
                                     </select>
                                 ))}
                             </div>
@@ -505,7 +510,7 @@
                                                 return (
                                                     <div key={partido.id} class={`p-2 rounded border text-xs ${colorBg}`}>
                                                         <p class="font-bold text-slate-800 truncate">{bandera(partido.local)} vs {bandera(partido.visitante)}</p>
-                                                        <p class="text-slate-500 font-medium mb-1">📅 {fechaPartido}</p>
+                                                        <p class="text-slate-500 font-medium mb-1">Fecha: {fechaPartido}</p>
                                                         <p class="text-slate-600 mt-1">Apuesta: {pr?.golesL}-{pr?.golesV}</p>
                                                         {jugado && <p class="text-slate-700 font-semibold mt-1">Real: {re.golesL}-{re.golesV} <span class="font-bold">(+{pts}p)</span></p>}
                                                     </div>
