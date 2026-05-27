@@ -17,30 +17,32 @@
     <script type="text/babel">
         const { useState, useEffect } = React;
 
+        // Grupos ordenados estrictamente por bombos oficiales de la FIFA (A1, A2, A3, A4)
         const GRUPOS = {
-            A: ["MEXICO", "SUDAFRICA", "CHEQUIA", "COREA DEL SUR"],
-            B: ["CANADA", "QATAR", "SUIZA", "BOSNIA"],
-            C: ["BRASIL", "HAITI", "ESCOCIA", "MARRUECOS"],
+            A: ["MEXICO", "SUDAFRICA", "COREA DEL SUR", "CHEQUIA"],
+            B: ["CANADA", "BOSNIA", "QATAR", "SUIZA"],
+            C: ["BRASIL", "MARRUECOS", "HAITI", "ESCOCIA"],
             D: ["EEUU", "PARAGUAY", "AUSTRALIA", "TURQUIA"],
-            E: ["ALEMANIA", "CURAZAO", "ECUADOR", "COSTA DE MARFIL"],
+            E: ["ALEMANIA", "CURAZAO", "COSTA DE MARFIL", "ECUADOR"],
             F: ["PAISES BAJOS", "JAPON", "SUECIA", "TUNEZ"],
             G: ["BELGICA", "EGIPTO", "IRAN", "NUEVA ZELANDA"],
             H: ["ESPAÑA", "CABO VERDE", "ARABIA SAUDI", "URUGUAY"],
-            I: ["FRANCIA", "IRAK", "NORUEGA", "SENEGAL"],
-            J: ["ARGELIA", "ARGENTINA", "JORDANIA", "AUSTRIA"],
-            K: ["PORTUGAL", "CONGO", "UZBEKISTAN", "COLOMBIA"],
+            I: ["FRANCIA", "SENEGAL", "IRAK", "NORUEGA"],
+            J: ["ARGENTINA", "ARGELIA", "AUSTRIA", "JORDANIA"],
+            K: ["PORTUGAL", "RD CONGO", "UZBEKISTAN", "COLOMBIA"],
             L: ["INGLATERRA", "CROACIA", "GHANA", "PANAMA"]
         };
 
         const TODOS_LOS_EQUIPOS = Object.values(GRUPOS).flat().sort();
 
+        // Generador cronológico oficial (Jornada 1, Jornada 2, Jornada 3)
         const generarPartidosPorGrupo = (letra, equipos) => [
-            { id: `${letra}1`, local: equipos[0], visitante: equipos[1] },
-            { id: `${letra}2`, local: equipos[2], visitante: equipos[3] },
-            { id: `${letra}3`, local: equipos[0], visitante: equipos[2] },
-            { id: `${letra}4`, local: equipos[1], visitante: equipos[3] },
-            { id: `${letra}5`, local: equipos[0], visitante: equipos[3] },
-            { id: `${letra}6`, local: equipos[1], visitante: equipos[2] }
+            { id: `${letra}1`, local: equipos[0], visitante: equipos[1] }, // J1
+            { id: `${letra}2`, local: equipos[2], visitante: equipos[3] }, // J1
+            { id: `${letra}3`, local: equipos[3], visitante: equipos[1] }, // J2
+            { id: `${letra}4`, local: equipos[0], visitante: equipos[2] }, // J2
+            { id: `${letra}5`, local: equipos[0], visitante: equipos[3] }, // J3
+            { id: `${letra}6`, local: equipos[1], visitante: equipos[2] }  // J3
         ];
 
         const TODOS_LOS_PARTIDOS = Object.keys(GRUPOS).reduce((acc, letra) => {
