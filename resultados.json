@@ -6,8 +6,8 @@
     "A4": { "fecha": "15/06/2026", "local": "MEXICO", "visitante": "COREA DEL SUR", "golesL": "2", "golesV": "4" },
     "A5": { "fecha": "19/06/2026", "local": "MEXICO", "visitante": "CHEQUIA", "golesL": "", "golesV": "" },
     "A6": { "fecha": "19/06/2026", "local": "SUDAFRICA", "visitante": "COREA DEL SUR", "golesL": "", "golesV": "" },
-    "B1": { "fecha": "12/06/2026", "local": "CANADA", "visitante": "BOSNIA", "golesL": "", "golesV": "" },
-    "B2": { "fecha": "12/06/2026", "local": "QATAR", "visitante": "SUIZA", "golesL": "", "golesV": "" },
+    "B1": { "fecha": "12/06/2026", "local": "CANADA", "visitante": "BOSNIA", "golesL": "1", "golesV": "1" },
+    "B2": { "fecha": "12/06/2026", "local": "QATAR", "visitante": "SUIZA", "golesL": "0", "golesV": "2" },
     "B3": { "fecha": "16/06/2026", "local": "SUIZA", "visitante": "BOSNIA", "golesL": "", "golesV": "" },
     "B4": { "fecha": "16/06/2026", "local": "CANADA", "visitante": "QATAR", "golesL": "", "golesV": "" },
     "B5": { "fecha": "20/06/2026", "local": "CANADA", "visitante": "SUIZA", "golesL": "", "golesV": "" },
@@ -74,10 +74,20 @@
     "L6": { "fecha": "25/06/2026", "local": "CROACIA", "visitante": "GHANA", "golesL": "", "golesV": "" }
   },
   "clasificados": {
-    "dieciseisavos": ["ESPAÑA","CROACIA"], "octavos": [], "cuartos": [], "semifinales": [], "final": []
+    "dieciseisavos": ["ESPAÑA", "CROACIA", "MEXICO", "ALEMANIA", "BRASIL", "ARGENTINA"],
+    "octavos": ["ESPAÑA", "ALEMANIA"],
+    "cuartos": [],
+    "semifinales": [],
+    "final": []
   },
   "posiciones": {
-    "1": "", "2": "", "3": "", "4": ""
+    "1": "",
+    "2": "",
+    "3": "ESPAÑA",
+    "4": "FRANCIA"
   },
-  "golesJugadores": {}
+  "golesJugadores": {
+    "MBAPPE": 3,
+    "MESSI": 1
+  }
 }
