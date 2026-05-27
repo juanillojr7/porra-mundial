@@ -205,21 +205,29 @@
             const procesarYDescargar = () => {
                 if (errorValidacion) return;
 
-                const confirmacion = window.confirm("¡Atención!\n\nSe va a descargar el archivo de tu apuesta en formato JSON.\nEs imprescindible que envíes este archivo al administrador para confirmar tu participación.\n\n¿Deseas continuar?");
+                const confirmacion = window.confirm("¡Atención!\n\nSe va a descargar el archivo de tu apuesta.\nEs imprescindible que envíes este archivo al administrador.\n\n¿Deseas continuar?");
                 if (!confirmacion) return;
 
-                const payload = { nombre: usuario.nombre, apuesta: { partidos, goleadores, posiciones, clasificados } };
+                const payload = { 
+                    nombre: usuario.nombre, 
+                    apuesta: { partidos, goleadores, posiciones, clasificados } 
+                };
                 const nombreLimpio = usuario.nombre.trim().replace(/\s+/g, '_');
-                const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload));
+
+                // Solución UTF-8: añadimos el BOM (\uFEFF) para forzar la codificación en Excel/iOS/Windows
+                const jsonString = JSON.stringify(payload);
+                const blob = new Blob(["\uFEFF" + jsonString], { type: "application/json;charset=utf-8" });
+                
+                const url = URL.createObjectURL(blob);
                 const dlAnchor = document.createElement('a');
-                dlAnchor.setAttribute("href", dataStr);
+                dlAnchor.setAttribute("href", url);
                 dlAnchor.setAttribute("download", `porra_${nombreLimpio}.json`);
                 document.body.appendChild(dlAnchor);
                 dlAnchor.click();
                 dlAnchor.remove();
 
                 setTimeout(() => {
-                    alert("¡Apuesta descargada correctamente!\n\nPor favor, ve a tus descargas y envía el archivo JSON al administrador por WhatsApp.");
+                    alert("¡Apuesta descargada correctamente!\n\nEnvía el archivo JSON al administrador.");
                 }, 500);
             };
 
