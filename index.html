@@ -158,13 +158,16 @@
                 dieciseisavos: Array(32).fill(''), octavos: Array(16).fill(''), cuartos: Array(8).fill(''), semifinales: Array(4).fill(''), final: Array(2).fill('')
             });
 
-            // Lógica de salto automático al introducir goles
+            const prevencionTeclasInvalidas = (e) => {
+                if (['e', 'E', '+', '-', '.', ','].includes(e.key)) {
+                    e.preventDefault();
+                }
+            };
+
             const handleCambioGol = (id, campo, valor) => {
-                // Forzar solo números y máximo 2 dígitos
                 let num = valor.replace(/\D/g, '').slice(0, 2);
                 setPartidos(prev => ({ ...prev, [id]: { ...prev[id], [campo]: num } }));
 
-                // Salto automático si se escribe 1 dígito
                 if (num.length === 1) {
                     if (campo === 'golesL') {
                         document.getElementById(`gol-${id}-V`)?.focus();
@@ -174,7 +177,7 @@
                             const nextId = TODOS_LOS_PARTIDOS[idx + 1].id;
                             document.getElementById(`gol-${nextId}-L`)?.focus();
                         } else if (idx === TODOS_LOS_PARTIDOS.length - 1) {
-                            document.getElementById(`gol-${id}-V`)?.blur(); // Ocultar teclado al terminar
+                            document.getElementById(`gol-${id}-V`)?.blur();
                         }
                     }
                 }
@@ -214,7 +217,6 @@
                 };
                 const nombreLimpio = usuario.nombre.trim().replace(/\s+/g, '_');
 
-                // Solución UTF-8: añadimos el BOM (\uFEFF) para forzar la codificación en Excel/iOS/Windows
                 const jsonString = JSON.stringify(payload);
                 const blob = new Blob(["\uFEFF" + jsonString], { type: "application/json;charset=utf-8" });
                 
