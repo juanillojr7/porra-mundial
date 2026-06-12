@@ -6,7 +6,7 @@
     "A4": { "fecha": "15/06/2026", "local": "MEXICO", "visitante": "COREA DEL SUR", "golesL": "", "golesV": "" },
     "A5": { "fecha": "19/06/2026", "local": "MEXICO", "visitante": "CHEQUIA", "golesL": "", "golesV": "" },
     "A6": { "fecha": "19/06/2026", "local": "SUDAFRICA", "visitante": "COREA DEL SUR", "golesL": "", "golesV": "" },
-    "B1": { "fecha": "12/06/2026", "local": "CANADA", "visitante": "BOSNIA", "golesL": "", "golesV": "" },
+    "B1": { "fecha": "12/06/2026", "local": "CANADA", "visitante": "BOSNIA", "golesL": "1", "golesV": "1" },
     "B2": { "fecha": "12/06/2026", "local": "QATAR", "visitante": "SUIZA", "golesL": "", "golesV": "" },
     "B3": { "fecha": "16/06/2026", "local": "SUIZA", "visitante": "BOSNIA", "golesL": "", "golesV": "" },
     "B4": { "fecha": "16/06/2026", "local": "CANADA", "visitante": "QATAR", "golesL": "", "golesV": "" },
