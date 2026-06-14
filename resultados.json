@@ -24,7 +24,7 @@
     "D4": { "fecha": "17/06/2026", "local": "EEUU", "visitante": "AUSTRALIA", "golesL": "", "golesV": "" },
     "D5": { "fecha": "21/06/2026", "local": "EEUU", "visitante": "TURQUIA", "golesL": "", "golesV": "" },
     "D6": { "fecha": "21/06/2026", "local": "PARAGUAY", "visitante": "AUSTRALIA", "golesL": "", "golesV": "" },
-    "E1": { "fecha": "13/06/2026", "local": "ALEMANIA", "visitante": "CURAZAO", "golesL": "", "golesV": "" },
+    "E1": { "fecha": "13/06/2026", "local": "ALEMANIA", "visitante": "CURAZAO", "golesL": "7", "golesV": "1" },
     "E2": { "fecha": "13/06/2026", "local": "COSTA DE MARFIL", "visitante": "ECUADOR", "golesL": "", "golesV": "" },
     "E3": { "fecha": "17/06/2026", "local": "ECUADOR", "visitante": "CURAZAO", "golesL": "", "golesV": "" },
     "E4": { "fecha": "17/06/2026", "local": "ALEMANIA", "visitante": "COSTA DE MARFIL", "golesL": "", "golesV": "" },
