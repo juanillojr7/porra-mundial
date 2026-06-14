@@ -30,7 +30,7 @@
     "E4": { "fecha": "17/06/2026", "local": "ALEMANIA", "visitante": "COSTA DE MARFIL", "golesL": "", "golesV": "" },
     "E5": { "fecha": "21/06/2026", "local": "ALEMANIA", "visitante": "ECUADOR", "golesL": "", "golesV": "" },
     "E6": { "fecha": "21/06/2026", "local": "CURAZAO", "visitante": "COSTA DE MARFIL", "golesL": "", "golesV": "" },
-    "F1": { "fecha": "14/06/2026", "local": "PAISES BAJOS", "visitante": "JAPON", "golesL": "", "golesV": "" },
+    "F1": { "fecha": "14/06/2026", "local": "PAISES BAJOS", "visitante": "JAPON", "golesL": "2", "golesV": "2" },
     "F2": { "fecha": "14/06/2026", "local": "SUECIA", "visitante": "TUNEZ", "golesL": "", "golesV": "" },
     "F3": { "fecha": "18/06/2026", "local": "TUNEZ", "visitante": "JAPON", "golesL": "", "golesV": "" },
     "F4": { "fecha": "18/06/2026", "local": "PAISES BAJOS", "visitante": "SUECIA", "golesL": "", "golesV": "" },
