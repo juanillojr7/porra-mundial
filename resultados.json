@@ -13,13 +13,13 @@
     "B5": { "fecha": "20/06/2026", "local": "CANADA", "visitante": "SUIZA", "golesL": "", "golesV": "" },
     "B6": { "fecha": "20/06/2026", "local": "BOSNIA", "visitante": "QATAR", "golesL": "", "golesV": "" },
     "C1": { "fecha": "12/06/2026", "local": "BRASIL", "visitante": "MARRUECOS", "golesL": "1", "golesV": "1" },
-    "C2": { "fecha": "12/06/2026", "local": "HAITI", "visitante": "ESCOCIA", "golesL": "", "golesV": "" },
+    "C2": { "fecha": "12/06/2026", "local": "HAITI", "visitante": "ESCOCIA", "golesL": "0", "golesV": "1" },
     "C3": { "fecha": "16/06/2026", "local": "ESCOCIA", "visitante": "MARRUECOS", "golesL": "", "golesV": "" },
     "C4": { "fecha": "16/06/2026", "local": "BRASIL", "visitante": "HAITI", "golesL": "", "golesV": "" },
     "C5": { "fecha": "20/06/2026", "local": "BRASIL", "visitante": "ESCOCIA", "golesL": "", "golesV": "" },
     "C6": { "fecha": "20/06/2026", "local": "MARRUECOS", "visitante": "HAITI", "golesL": "", "golesV": "" },
     "D1": { "fecha": "13/06/2026", "local": "EEUU", "visitante": "PARAGUAY", "golesL": "4", "golesV": "1" },
-    "D2": { "fecha": "13/06/2026", "local": "AUSTRALIA", "visitante": "TURQUIA", "golesL": "", "golesV": "" },
+    "D2": { "fecha": "13/06/2026", "local": "AUSTRALIA", "visitante": "TURQUIA", "golesL": "2", "golesV": "0" },
     "D3": { "fecha": "17/06/2026", "local": "TURQUIA", "visitante": "PARAGUAY", "golesL": "", "golesV": "" },
     "D4": { "fecha": "17/06/2026", "local": "EEUU", "visitante": "AUSTRALIA", "golesL": "", "golesV": "" },
     "D5": { "fecha": "21/06/2026", "local": "EEUU", "visitante": "TURQUIA", "golesL": "", "golesV": "" },
@@ -86,5 +86,8 @@
     "3": "",
     "4": ""
   },
-  "golesJugadores": {}
+  "golesJugadores": {
+    "VINI": 1,
+    "VINICIUS": 1
+  }
 }
