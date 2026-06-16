@@ -48,7 +48,7 @@
     "H4": { "fecha": "19/06/2026", "local": "ESPANA", "visitante": "ARABIA SAUDI", "golesL": "", "golesV": "" },
     "H5": { "fecha": "23/06/2026", "local": "ESPANA", "visitante": "URUGUAY", "golesL": "", "golesV": "" },
     "H6": { "fecha": "23/06/2026", "local": "CABO VERDE", "visitante": "ARABIA SAUDI", "golesL": "", "golesV": "" },
-    "I1": { "fecha": "15/06/2026", "local": "FRANCIA", "visitante": "SENEGAL", "golesL": "", "golesV": "" },
+    "I1": { "fecha": "15/06/2026", "local": "FRANCIA", "visitante": "SENEGAL", "golesL": "3", "golesV": "1" },
     "I2": { "fecha": "15/06/2026", "local": "IRAK", "visitante": "NORUEGA", "golesL": "", "golesV": "" },
     "I3": { "fecha": "19/06/2026", "local": "NORUEGA", "visitante": "SENEGAL", "golesL": "", "golesV": "" },
     "I4": { "fecha": "19/06/2026", "local": "FRANCIA", "visitante": "IRAK", "golesL": "", "golesV": "" },
@@ -90,6 +90,7 @@
     "VINI": 1,
     "VINICIUS": 1,
     "HAVERTZ": 2,
-    "KAI HAVERTZ": 2
+    "KAI HAVERTZ": 2,
+    "MBAPPE": 2
   }
 }
