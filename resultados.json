@@ -49,13 +49,13 @@
     "H5": { "fecha": "23/06/2026", "local": "ESPANA", "visitante": "URUGUAY", "golesL": "", "golesV": "" },
     "H6": { "fecha": "23/06/2026", "local": "CABO VERDE", "visitante": "ARABIA SAUDI", "golesL": "", "golesV": "" },
     "I1": { "fecha": "15/06/2026", "local": "FRANCIA", "visitante": "SENEGAL", "golesL": "3", "golesV": "1" },
-    "I2": { "fecha": "15/06/2026", "local": "IRAK", "visitante": "NORUEGA", "golesL": "", "golesV": "" },
+    "I2": { "fecha": "15/06/2026", "local": "IRAK", "visitante": "NORUEGA", "golesL": "1", "golesV": "4" },
     "I3": { "fecha": "19/06/2026", "local": "NORUEGA", "visitante": "SENEGAL", "golesL": "", "golesV": "" },
     "I4": { "fecha": "19/06/2026", "local": "FRANCIA", "visitante": "IRAK", "golesL": "", "golesV": "" },
     "I5": { "fecha": "23/06/2026", "local": "FRANCIA", "visitante": "NORUEGA", "golesL": "", "golesV": "" },
     "I6": { "fecha": "23/06/2026", "local": "SENEGAL", "visitante": "IRAK", "golesL": "", "golesV": "" },
-    "J1": { "fecha": "16/06/2026", "local": "ARGENTINA", "visitante": "ARGELIA", "golesL": "", "golesV": "" },
-    "J2": { "fecha": "16/06/2026", "local": "AUSTRIA", "visitante": "JORDANIA", "golesL": "", "golesV": "" },
+    "J1": { "fecha": "16/06/2026", "local": "ARGENTINA", "visitante": "ARGELIA", "golesL": "3", "golesV": "0" },
+    "J2": { "fecha": "16/06/2026", "local": "AUSTRIA", "visitante": "JORDANIA", "golesL": "3", "golesV": "1" },
     "J3": { "fecha": "20/06/2026", "local": "JORDANIA", "visitante": "ARGELIA", "golesL": "", "golesV": "" },
     "J4": { "fecha": "20/06/2026", "local": "ARGENTINA", "visitante": "AUSTRIA", "golesL": "", "golesV": "" },
     "J5": { "fecha": "24/06/2026", "local": "ARGENTINA", "visitante": "JORDANIA", "golesL": "", "golesV": "" },
@@ -91,6 +91,8 @@
     "VINICIUS": 1,
     "HAVERTZ": 2,
     "KAI HAVERTZ": 2,
-    "MBAPPE": 2
+    "MBAPPE": 2,
+    "MESSI": 3,
+    "LEO MESSI": 3
   }
 }
