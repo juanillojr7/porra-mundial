@@ -60,7 +60,7 @@
     "J4": { "fecha": "20/06/2026", "local": "ARGENTINA", "visitante": "AUSTRIA", "golesL": "", "golesV": "" },
     "J5": { "fecha": "24/06/2026", "local": "ARGENTINA", "visitante": "JORDANIA", "golesL": "", "golesV": "" },
     "J6": { "fecha": "24/06/2026", "local": "ARGELIA", "visitante": "AUSTRIA", "golesL": "", "golesV": "" },
-    "K1": { "fecha": "16/06/2026", "local": "PORTUGAL", "visitante": "RD CONGO", "golesL": "", "golesV": "" },
+    "K1": { "fecha": "16/06/2026", "local": "PORTUGAL", "visitante": "RD CONGO", "golesL": "1", "golesV": "1" },
     "K2": { "fecha": "16/06/2026", "local": "UZBEKISTAN", "visitante": "COLOMBIA", "golesL": "", "golesV": "" },
     "K3": { "fecha": "20/06/2026", "local": "COLOMBIA", "visitante": "RD CONGO", "golesL": "", "golesV": "" },
     "K4": { "fecha": "20/06/2026", "local": "PORTUGAL", "visitante": "UZBEKISTAN", "golesL": "", "golesV": "" },
