@@ -2,7 +2,7 @@
   "partidos": {
     "A1": { "fecha": "11/06/2026", "local": "MEXICO", "visitante": "SUDAFRICA", "golesL": "2", "golesV": "0" },
     "A2": { "fecha": "11/06/2026", "local": "COREA DEL SUR", "visitante": "CHEQUIA", "golesL": "2", "golesV": "1" },
-    "A3": { "fecha": "15/06/2026", "local": "CHEQUIA", "visitante": "SUDAFRICA", "golesL": "", "golesV": "" },
+    "A3": { "fecha": "15/06/2026", "local": "CHEQUIA", "visitante": "SUDAFRICA", "golesL": "1", "golesV": "1" },
     "A4": { "fecha": "15/06/2026", "local": "MEXICO", "visitante": "COREA DEL SUR", "golesL": "", "golesV": "" },
     "A5": { "fecha": "19/06/2026", "local": "MEXICO", "visitante": "CHEQUIA", "golesL": "", "golesV": "" },
     "A6": { "fecha": "19/06/2026", "local": "SUDAFRICA", "visitante": "COREA DEL SUR", "golesL": "", "golesV": "" },
