@@ -74,7 +74,7 @@
     "L6": { "fecha": "25/06/2026", "local": "CROACIA", "visitante": "GHANA", "golesL": "", "golesV": "" }
   },
   "clasificados": {
-    "dieciseisavos": [],
+    "dieciseisavos": ["EEUU","MEXICO","BRASIL","MARRUECOS","CANADA","SUIZA"],
     "octavos": [],
     "cuartos": [],
     "semifinales": [],
