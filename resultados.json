@@ -39,7 +39,7 @@
     "G1": { "fecha": "14/06/2026", "local": "BELGICA", "visitante": "EGIPTO", "golesL": "1", "golesV": "1" },
     "G2": { "fecha": "14/06/2026", "local": "IRAN", "visitante": "NUEVA ZELANDA", "golesL": "2", "golesV": "2" },
     "G3": { "fecha": "18/06/2026", "local": "NUEVA ZELANDA", "visitante": "EGIPTO", "golesL": "", "golesV": "" },
-    "G4": { "fecha": "18/06/2026", "local": "BELGICA", "visitante": "IRAN", "golesL": "", "golesV": "" },
+    "G4": { "fecha": "18/06/2026", "local": "BELGICA", "visitante": "IRAN", "golesL": "0", "golesV": "0" },
     "G5": { "fecha": "22/06/2026", "local": "BELGICA", "visitante": "NUEVA ZELANDA", "golesL": "", "golesV": "" },
     "G6": { "fecha": "22/06/2026", "local": "EGIPTO", "visitante": "IRAN", "golesL": "", "golesV": "" },
     "H1": { "fecha": "15/06/2026", "local": "ESPANA", "visitante": "CABO VERDE", "golesL": "0", "golesV": "0" },
