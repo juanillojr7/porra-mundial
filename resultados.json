@@ -57,7 +57,7 @@
     "J1": { "fecha": "16/06/2026", "local": "ARGENTINA", "visitante": "ARGELIA", "golesL": "3", "golesV": "0" },
     "J2": { "fecha": "16/06/2026", "local": "AUSTRIA", "visitante": "JORDANIA", "golesL": "3", "golesV": "1" },
     "J3": { "fecha": "20/06/2026", "local": "JORDANIA", "visitante": "ARGELIA", "golesL": "", "golesV": "" },
-    "J4": { "fecha": "20/06/2026", "local": "ARGENTINA", "visitante": "AUSTRIA", "golesL": "", "golesV": "" },
+    "J4": { "fecha": "20/06/2026", "local": "ARGENTINA", "visitante": "AUSTRIA", "golesL": "2", "golesV": "0" },
     "J5": { "fecha": "24/06/2026", "local": "ARGENTINA", "visitante": "JORDANIA", "golesL": "", "golesV": "" },
     "J6": { "fecha": "24/06/2026", "local": "ARGELIA", "visitante": "AUSTRIA", "golesL": "", "golesV": "" },
     "K1": { "fecha": "16/06/2026", "local": "PORTUGAL", "visitante": "RD CONGO", "golesL": "1", "golesV": "1" },
@@ -74,7 +74,7 @@
     "L6": { "fecha": "25/06/2026", "local": "CROACIA", "visitante": "GHANA", "golesL": "", "golesV": "" }
   },
   "clasificados": {
-    "dieciseisavos": ["EEUU","MEXICO","BRASIL","MARRUECOS","CANADA","SUIZA","ALEMANIA"],
+    "dieciseisavos": ["EEUU","MEXICO","BRASIL","MARRUECOS","CANADA","SUIZA","ALEMANIA","ARGENTINA"],
     "octavos": [],
     "cuartos": [],
     "semifinales": [],
@@ -92,8 +92,8 @@
     "HAVERTZ": 2,
     "KAI HAVERTZ": 2,
     "MBAPPE": 2,
-    "MESSI": 3,
-    "LEO MESSI": 3,
+    "MESSI": 5,
+    "LEO MESSI": 5,
     "WISSA": 1,
     "KANE": 2,
     "HARRY KANE": 2,
