@@ -63,7 +63,7 @@
     "K1": { "fecha": "16/06/2026", "local": "PORTUGAL", "visitante": "RD CONGO", "golesL": "1", "golesV": "1" },
     "K2": { "fecha": "16/06/2026", "local": "UZBEKISTAN", "visitante": "COLOMBIA", "golesL": "1", "golesV": "3" },
     "K3": { "fecha": "20/06/2026", "local": "COLOMBIA", "visitante": "RD CONGO", "golesL": "", "golesV": "" },
-    "K4": { "fecha": "20/06/2026", "local": "PORTUGAL", "visitante": "UZBEKISTAN", "golesL": "", "golesV": "" },
+    "K4": { "fecha": "20/06/2026", "local": "PORTUGAL", "visitante": "UZBEKISTAN", "golesL": "5", "golesV": "0" },
     "K5": { "fecha": "24/06/2026", "local": "PORTUGAL", "visitante": "COLOMBIA", "golesL": "", "golesV": "" },
     "K6": { "fecha": "24/06/2026", "local": "RD CONGO", "visitante": "UZBEKISTAN", "golesL": "", "golesV": "" },
     "L1": { "fecha": "17/06/2026", "local": "INGLATERRA", "visitante": "CROACIA", "golesL": "4", "golesV": "2" },
@@ -101,6 +101,10 @@
     "LAMINE YAMAL": 1,
     "LAMINE": 1,
     "OYARZABAL": 2,
-    "DEMBELE": 1
+    "DEMBELE": 1,
+    "CR7": 2,
+    "CRISTIANO": 2,
+    "CRISTIANO RONALDO": 2,
+    "RONALDO": 2
   }
 }
