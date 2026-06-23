@@ -69,7 +69,7 @@
     "L1": { "fecha": "17/06/2026", "local": "INGLATERRA", "visitante": "CROACIA", "golesL": "4", "golesV": "2" },
     "L2": { "fecha": "17/06/2026", "local": "GHANA", "visitante": "PANAMA", "golesL": "1", "golesV": "0" },
     "L3": { "fecha": "21/06/2026", "local": "PANAMA", "visitante": "CROACIA", "golesL": "", "golesV": "" },
-    "L4": { "fecha": "21/06/2026", "local": "INGLATERRA", "visitante": "GHANA", "golesL": "", "golesV": "" },
+    "L4": { "fecha": "21/06/2026", "local": "INGLATERRA", "visitante": "GHANA", "golesL": "0", "golesV": "0" },
     "L5": { "fecha": "25/06/2026", "local": "INGLATERRA", "visitante": "PANAMA", "golesL": "", "golesV": "" },
     "L6": { "fecha": "25/06/2026", "local": "CROACIA", "visitante": "GHANA", "golesL": "", "golesV": "" }
   },
