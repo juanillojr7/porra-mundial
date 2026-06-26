@@ -52,8 +52,8 @@
     "I2": { "fecha": "15/06/2026", "local": "IRAK", "visitante": "NORUEGA", "golesL": "1", "golesV": "4" },
     "I3": { "fecha": "19/06/2026", "local": "NORUEGA", "visitante": "SENEGAL", "golesL": "3", "golesV": "2" },
     "I4": { "fecha": "19/06/2026", "local": "FRANCIA", "visitante": "IRAK", "golesL": "3", "golesV": "0" },
-    "I5": { "fecha": "23/06/2026", "local": "FRANCIA", "visitante": "NORUEGA", "golesL": "", "golesV": "" },
-    "I6": { "fecha": "23/06/2026", "local": "SENEGAL", "visitante": "IRAK", "golesL": "", "golesV": "" },
+    "I5": { "fecha": "23/06/2026", "local": "FRANCIA", "visitante": "NORUEGA", "golesL": "4", "golesV": "1" },
+    "I6": { "fecha": "23/06/2026", "local": "SENEGAL", "visitante": "IRAK", "golesL": "5", "golesV": "0" },
     "J1": { "fecha": "16/06/2026", "local": "ARGENTINA", "visitante": "ARGELIA", "golesL": "3", "golesV": "0" },
     "J2": { "fecha": "16/06/2026", "local": "AUSTRIA", "visitante": "JORDANIA", "golesL": "3", "golesV": "1" },
     "J3": { "fecha": "20/06/2026", "local": "JORDANIA", "visitante": "ARGELIA", "golesL": "1", "golesV": "2" },
@@ -101,10 +101,11 @@
     "LAMINE YAMAL": 1,
     "LAMINE": 1,
     "OYARZABAL": 2,
-    "DEMBELE": 1,
+    "DEMBELE": 4,
     "CR7": 2,
     "CRISTIANO": 2,
     "CRISTIANO RONALDO": 2,
-    "RONALDO": 2
+    "RONALDO": 2,
+    "NDIAYE": 1
   }
 }
