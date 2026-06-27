@@ -46,8 +46,8 @@
     "H2": { "fecha": "15/06/2026", "local": "ARABIA SAUDI", "visitante": "URUGUAY", "golesL": "1", "golesV": "1" },
     "H3": { "fecha": "19/06/2026", "local": "URUGUAY", "visitante": "CABO VERDE", "golesL": "2", "golesV": "2" },
     "H4": { "fecha": "19/06/2026", "local": "ESPANA", "visitante": "ARABIA SAUDI", "golesL": "4", "golesV": "0" },
-    "H5": { "fecha": "23/06/2026", "local": "ESPANA", "visitante": "URUGUAY", "golesL": "", "golesV": "" },
-    "H6": { "fecha": "23/06/2026", "local": "CABO VERDE", "visitante": "ARABIA SAUDI", "golesL": "", "golesV": "" },
+    "H5": { "fecha": "23/06/2026", "local": "ESPANA", "visitante": "URUGUAY", "golesL": "1", "golesV": "0" },
+    "H6": { "fecha": "23/06/2026", "local": "CABO VERDE", "visitante": "ARABIA SAUDI", "golesL": "0", "golesV": "0" },
     "I1": { "fecha": "15/06/2026", "local": "FRANCIA", "visitante": "SENEGAL", "golesL": "3", "golesV": "1" },
     "I2": { "fecha": "15/06/2026", "local": "IRAK", "visitante": "NORUEGA", "golesL": "1", "golesV": "4" },
     "I3": { "fecha": "19/06/2026", "local": "NORUEGA", "visitante": "SENEGAL", "golesL": "3", "golesV": "2" },
@@ -74,7 +74,7 @@
     "L6": { "fecha": "25/06/2026", "local": "CROACIA", "visitante": "GHANA", "golesL": "", "golesV": "" }
   },
   "clasificados": {
-    "dieciseisavos": ["EEUU","MEXICO","BRASIL","MARRUECOS","CANADA","SUIZA","ALEMANIA","ARGENTINA","NORUEGA","FRANCIA","JAPON","EGIPTO","PAISES BAJOS","PORTUGAL","COLOMBIA","ESPANA","SUDAFRICA","AUSTRALIA","PARAGUAY","SUECIA","ESPANA","BOSNIA","COSTA DE MARFIL","ECUADOR"],
+    "dieciseisavos": ["EEUU","MEXICO","BRASIL","MARRUECOS","CANADA","SUIZA","ALEMANIA","ARGENTINA","NORUEGA","FRANCIA","JAPON","EGIPTO","PAISES BAJOS","PORTUGAL","COLOMBIA","ESPANA","SUDAFRICA","AUSTRALIA","PARAGUAY","SUECIA","ESPANA","BOSNIA","COSTA DE MARFIL","ECUADOR","CABO VERDE"],
     "octavos": [],
     "cuartos": [],
     "semifinales": [],
