@@ -75,7 +75,7 @@
   },
   "clasificados": {
     "dieciseisavos": ["EEUU","MEXICO","BRASIL","MARRUECOS","CANADA","SUIZA","ALEMANIA","ARGENTINA","NORUEGA","FRANCIA","JAPON","EGIPTO","PAISES BAJOS","PORTUGAL","COLOMBIA","ESPANA","SUDAFRICA","AUSTRALIA","PARAGUAY","SUECIA","CROACIA","BOSNIA","COSTA DE MARFIL","ECUADOR","CABO VERDE","GHANA","BELGICA","SENEGAL","AUSTRIA","ARGELIA","RD CONGO","INGLATERRA"],
-    "octavos": [],
+    "octavos": ["CANADA"],
     "cuartos": [],
     "semifinales": [],
     "final": []
