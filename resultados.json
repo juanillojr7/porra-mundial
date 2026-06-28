@@ -70,8 +70,8 @@
     "L2": { "fecha": "17/06/2026", "local": "GHANA", "visitante": "PANAMA", "golesL": "1", "golesV": "0" },
     "L3": { "fecha": "21/06/2026", "local": "PANAMA", "visitante": "CROACIA", "golesL": "0", "golesV": "1" },
     "L4": { "fecha": "21/06/2026", "local": "INGLATERRA", "visitante": "GHANA", "golesL": "0", "golesV": "0" },
-    "L5": { "fecha": "25/06/2026", "local": "INGLATERRA", "visitante": "PANAMA", "golesL": "", "golesV": "" },
-    "L6": { "fecha": "25/06/2026", "local": "CROACIA", "visitante": "GHANA", "golesL": "", "golesV": "" }
+    "L5": { "fecha": "25/06/2026", "local": "INGLATERRA", "visitante": "PANAMA", "golesL": "2", "golesV": "0" },
+    "L6": { "fecha": "25/06/2026", "local": "CROACIA", "visitante": "GHANA", "golesL": "2", "golesV": "1" }
   },
   "clasificados": {
     "dieciseisavos": ["EEUU","MEXICO","BRASIL","MARRUECOS","CANADA","SUIZA","ALEMANIA","ARGENTINA","NORUEGA","FRANCIA","JAPON","EGIPTO","PAISES BAJOS","PORTUGAL","COLOMBIA","ESPANA","SUDAFRICA","AUSTRALIA","PARAGUAY","SUECIA","ESPANA","BOSNIA","COSTA DE MARFIL","ECUADOR","CABO VERDE","GHANA","BELGICA","SENEGAL","AUSTRIA","ARGELIA","RD CONGO"],
@@ -95,9 +95,9 @@
     "MESSI": 6,
     "LEO MESSI": 6,
     "WISSA": 3,
-    "KANE": 2,
-    "HARRY KANE": 2,
-    "HARRY": 2,
+    "KANE": 3,
+    "HARRY KANE": 3,
+    "HARRY": 3,
     "LAMINE YAMAL": 1,
     "LAMINE": 1,
     "OYARZABAL": 2,
