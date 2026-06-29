@@ -75,7 +75,7 @@
   },
   "clasificados": {
     "dieciseisavos": ["EEUU","MEXICO","BRASIL","MARRUECOS","CANADA","SUIZA","ALEMANIA","ARGENTINA","NORUEGA","FRANCIA","JAPON","EGIPTO","PAISES BAJOS","PORTUGAL","COLOMBIA","ESPANA","SUDAFRICA","AUSTRALIA","PARAGUAY","SUECIA","CROACIA","BOSNIA","COSTA DE MARFIL","ECUADOR","CABO VERDE","GHANA","BELGICA","SENEGAL","AUSTRIA","ARGELIA","RD CONGO","INGLATERRA"],
-    "octavos": ["CANADA","BRASIL"],
+    "octavos": ["CANADA","BRASIL","PARAGUAY"],
     "cuartos": [],
     "semifinales": [],
     "final": []
@@ -89,8 +89,8 @@
   "golesJugadores": {
     "VINI": 4,
     "VINICIUS": 4,
-    "HAVERTZ": 2,
-    "KAI HAVERTZ": 2,
+    "HAVERTZ": 3,
+    "KAI HAVERTZ": 3,
     "MBAPPE": 4,
     "MESSI": 6,
     "LEO MESSI": 6,
