@@ -75,7 +75,7 @@
   },
   "clasificados": {
     "dieciseisavos": ["EEUU","MEXICO","BRASIL","MARRUECOS","CANADA","SUIZA","ALEMANIA","ARGENTINA","NORUEGA","FRANCIA","JAPON","EGIPTO","PAISES BAJOS","PORTUGAL","COLOMBIA","ESPANA","SUDAFRICA","AUSTRALIA","PARAGUAY","SUECIA","CROACIA","BOSNIA","COSTA DE MARFIL","ECUADOR","CABO VERDE","GHANA","BELGICA","SENEGAL","AUSTRIA","ARGELIA","RD CONGO","INGLATERRA"],
-    "octavos": ["CANADA","BRASIL","PARAGUAY"],
+    "octavos": ["CANADA","BRASIL","PARAGUAY","MARRUECOS"],
     "cuartos": [],
     "semifinales": [],
     "final": []
@@ -106,6 +106,7 @@
     "CRISTIANO": 2,
     "CRISTIANO RONALDO": 2,
     "RONALDO": 2,
-    "NDIAYE": 1
+    "NDIAYE": 1,
+    "GAKPO": 1
   }
 }
