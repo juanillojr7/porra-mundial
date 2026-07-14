@@ -78,7 +78,7 @@
     "octavos": ["CANADA","BRASIL","PARAGUAY","MARRUECOS","NORUEGA","FRANCIA","MEXICO","INGLATERRA","BELGICA","EEUU","ESPANA","PORTUGAL","SUIZA","EGIPTO","ARGENTINA","COLOMBIA"],
     "cuartos": ["MARRUECOS","FRANCIA","NORUEGA","INGLATERRA","ESPANA","BELGICA","ARGENTINA","SUIZA"],
     "semifinales": ["FRANCIA","ESPANA","INGLATERRA","ARGENTINA"],
-    "final": []
+    "final": ["ESPANA"]
   },
   "posiciones": {
     "1": "",
@@ -100,7 +100,7 @@
     "HARRY": 6,
     "LAMINE YAMAL": 1,
     "LAMINE": 1,
-    "OYARZABAL": 4,
+    "OYARZABAL": 5,
     "DEMBELE": 5,
     "CR7": 3,
     "CRISTIANO": 3,
