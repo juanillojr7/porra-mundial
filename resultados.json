@@ -78,7 +78,7 @@
     "octavos": ["CANADA","BRASIL","PARAGUAY","MARRUECOS","NORUEGA","FRANCIA","MEXICO","INGLATERRA","BELGICA","EEUU","ESPANA","PORTUGAL","SUIZA","EGIPTO","ARGENTINA","COLOMBIA"],
     "cuartos": ["MARRUECOS","FRANCIA","NORUEGA","INGLATERRA","ESPANA","BELGICA","ARGENTINA","SUIZA"],
     "semifinales": ["FRANCIA","ESPANA","INGLATERRA","ARGENTINA"],
-    "final": ["ESPANA"]
+    "final": ["ESPANA","ARGENTINA"]
   },
   "posiciones": {
     "1": "",
