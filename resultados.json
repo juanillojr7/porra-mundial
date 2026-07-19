@@ -81,8 +81,8 @@
     "final": ["ESPANA","ARGENTINA"]
   },
   "posiciones": {
-    "1": "",
-    "2": "",
+    "1": "ESPANA",
+    "2": "ARGENTINA",
     "3": "INGLATERRA",
     "4": "FRANCIA"
   },
